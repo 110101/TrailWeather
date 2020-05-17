@@ -1,4 +1,5 @@
 import M_owm_api as owm_api
+import P_conditionalgo as algo
 import pandas
 
 # demo lat long
@@ -20,6 +21,6 @@ owm_dataset_return = pandas.DataFrame([])
 owm_dataset_return = owm_hist_dataset_return.append(owm_forecast_dataset_return, ignore_index=True)
 
 # algo
-condition_prob = condition_algo.run(owm_dataset_return)
+condition_prob = algo.run(owm_dataset_return)
 
 print("fin")

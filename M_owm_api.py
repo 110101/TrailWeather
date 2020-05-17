@@ -58,7 +58,7 @@ def owm_forecast_data(time, lat, lon):
     print(datetime_apilimit, datetime.utcfromtimestamp(datetime_apilimit))
 
     # assemble api url
-    api_key = "54f724090313801f7966324601cccdfc"
+    api_key = M_apikey.getkey()
     api_base = "https://api.openweathermap.org/data/2.5/"
 
     api = api_base + "onecall?lat=" + lat + "&lon=" + lon + "&appid=" + api_key
