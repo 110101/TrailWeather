@@ -11,12 +11,17 @@ def run(dataset):
     newest = dataset.tail(1)
 
     # all information on last rain
-    # timestamp of last rain
+    # find all time stamps with rain
     rain = dataset.query('(weather_id >= 200) & (weather_id < 700)')
-    lastrain = rain.tail(1)
+    
+    # information on all "rains"
+    # ---
+
+    # last rain / last row
+    lastrain_row = rain.tail(1)
 
     # time since last rain
-    ts_lastrain = (int(newest['dt']) - int(lastrain['dt']))
+    ts_lastrain = (int(newest['dt']) - int(lastrain_row['dt']))
 
     # all other rain
     # get timestamp change is bigger than 3600
@@ -28,6 +33,8 @@ def run(dataset):
         if rain.iloc[row+1]['dt'] - rain.iloc[row]['dt'] > 3600:
             rain_end_ts = rain.iloc[row]['dt']
             rain_duration = rain_end_ts - rain_start_ts
+            
+            # rain object
             rain_data = rain_data.append({'dt': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
             rain_start_ts = rain.iloc[row+1]['dt']
 
