@@ -3,6 +3,20 @@ import pandas
 # abbriviations
 # ts - timestamp
 
+class rain_obj:
+    def __init__(self):
+        self.rain_start_ts = ""
+        self.rain_end_ts = ""
+        self.duration = ""
+        self.intensity_min = ""
+        self.intensity_max = ""
+        self.intensity_avrg = ""
+        self.time_2_prev_rain = ""
+        self.temp_2_prev_rain = ""
+        self.hum_2_prev_rain = ""
+        self.wind_2_prev_rain = ""
+
+
 def run(dataset):
     # dataset consists out of six rows timestamp: 'dt'; temperature: 'temp'; humidity: 'humidity; dew point:
     # 'dew_point'; wind: 'wind'; weather id: 'weather_id'
@@ -13,7 +27,8 @@ def run(dataset):
     # all information on last rain
     # find all time stamps with rain
     rain = dataset.query('(weather_id >= 200) & (weather_id < 700)')
-    
+
+    # ---
     # information on all "rains"
     # ---
 
@@ -39,14 +54,14 @@ def run(dataset):
             rain_start_ts = rain.iloc[row+1]['dt']
 
     # duration of last rain
-    lastrain_duration = int(lastrain['dt']) - rain_start_ts
+    lastrain_duration = int(lastrain_row['dt']) - rain_start_ts
 
     # intensity of last rain
 
     # add last rain to rain_data dataset
-    # rain_data = rain_data.append(
-    #   {'dt': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,
-    #     'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
+    rain_data = rain_data.append(
+       {'dt': int(lastrain_row['dt']), 'weather_id': int(lastrain_row['weather_id']), 'duration': lastrain_duration,
+         'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
 
     # ----
     # Temperatur
