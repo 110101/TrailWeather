@@ -1,4 +1,5 @@
 import requests
+import certifi
 import M_apikey
 import pandas
 from datetime import timezone, datetime
@@ -8,7 +9,7 @@ def owm_hist_data(time, lat, lon):
     ts_owm_api_start = datetime.now()
 
     # assemble api url
-    api_key= M_apikey.getkey()
+    api_key= "54f724090313801f7966324601cccdfc"
     api_base = "https://api.openweathermap.org/data/2.5/onecall/"
 
     # api time limitations
@@ -26,7 +27,7 @@ def owm_hist_data(time, lat, lon):
 
         api = api_base + "timemachine?lat=" + lat + "&lon=" + lon + "&dt=" + str(datetime_apilimit) + "&appid=" + api_key
 
-
+        print(api)
         # access api
         owm_feedback_json = requests.get(api).json()
         owm_dataset_raw = owm_feedback_json["hourly"]
