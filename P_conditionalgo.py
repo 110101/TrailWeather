@@ -38,7 +38,7 @@ def run(dataset):
     # time since last rain
     ts_lastrain = (int(newest['dt']) - int(lastrain_row['dt']))
 
-    # all other rain
+    # all data on the rain
     # get timestamp change is bigger than 3600
     col = ['dt', 'weather_id', 'duration', 'intnsty_avrg', 'intnsty_peak']
     rain_data = pandas.DataFrame(columns=col)
@@ -50,7 +50,9 @@ def run(dataset):
             rain_duration = rain_end_ts - rain_start_ts
             
             # rain object
-            rain_data = rain_data.append({'dt': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
+            rain_data = rain_data.append(
+                {'dt': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,
+                 'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
             rain_start_ts = rain.iloc[row+1]['dt']
 
     # duration of last rain
@@ -65,6 +67,7 @@ def run(dataset):
 
     # ----
     # Temperatur
+    # Temp curve between rain
     # ----
     # average temp since last rain
     index_lastrain = lastrain.index.values[0]
@@ -82,21 +85,15 @@ def run(dataset):
     #reverse dataset
     # reversed_rain = ts_lastrain.iloc[::-1]
 
-    # test output
-    # print(reversed_rain)
+    # ----
+    # Humidity
+    # Humidity curve between rain
+    # ----
 
-    # duration of last rain
-
-    # intensity of last rain
-
-    # temp, wind, sky since last rain
-    temp = dataset[['dt', 'temp']]
-
-    # time till rain before last rain
-
-    # intensity of rain before last rain
-
-    print(ts_lastrain)
+    # ----
+    # Wind
+    # Wind intensity between rain
+    # ----
 
     prob_road = 0.5
     prob_gravel = 0.8
