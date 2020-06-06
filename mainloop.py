@@ -15,7 +15,7 @@ print(timestamp)
 # owm_hist_dataset_return = owm_api.owm_hist_data(timestamp, lat, lon)
 
 # test data to csv
-# owm_hist_dataset_return.to_csv("test.csv")
+owm_hist_dataset_return.to_csv("test.csv")
 
 owm_hist_dataset_return = pandas.read_csv("test.csv")
 

@@ -40,7 +40,7 @@ def run(dataset):
 
     # all data on the rain
     # get timestamp change is bigger than 3600
-    col = ['dt', 'weather_id', 'duration', 'intnsty_avrg', 'intnsty_peak']
+    col = ['dt_start', 'dt_end', 'weather_id', 'duration', 'intnsty_avrg', 'intnsty_peak']
     rain_data = pandas.DataFrame(columns=col)
     rain_len = rain.shape[0] -1
     rain_start_ts = int(rain.head(1)['dt'].values)
@@ -51,7 +51,7 @@ def run(dataset):
             
             # rain object
             rain_data = rain_data.append(
-                {'dt': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,
+                {'dt_start': rain_start_ts, 'dt_end': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,
                  'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
             rain_start_ts = rain.iloc[row+1]['dt']
 

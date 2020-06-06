@@ -39,7 +39,20 @@ def owm_hist_data(time, lat, lon):
             wind = owm_dataset_raw[x]["wind_speed"]
             weather_id = owm_dataset_raw[x]["weather"]
             weather_id = weather_id[0]["id"]
-            string = {"dt": int(owm_dataset_raw[x]["dt"]),"temp": temp_celsius, "humidity": owm_dataset_raw[x]["humidity"], "dew_point": dewpoint, "wind": wind, "weather_id": weather_id}
+            if (weather_id >= 200) & (weather_id < 600):
+                test = owm_dataset_raw[x]
+                if "rain" in owm_dataset_raw[x]:
+                    rain_mm = owm_dataset_raw[x]["rain"]["1h"]
+                else:
+                    rain_mm = 0
+            elif (weather_id >= 600) & (weather_id < 700):
+                if "snow" in owm_dataset_raw[x]:
+                    rain_mm = owm_dataset_raw[x]["snow"]["1h"]
+                else:
+                    rain_mm = 0
+            else:
+                rain_mm = 0
+            string = {"dt": int(owm_dataset_raw[x]["dt"]),"temp": temp_celsius, "humidity": owm_dataset_raw[x]["humidity"], "dew_point": dewpoint, "wind": wind, "weather_id": weather_id, "rain_mm": rain_mm}
             owm_dataset_processed.append(string)
 
 
