@@ -18,17 +18,15 @@ class rain_obj:
 
 
 def run(dataset):
-    # dataset consists out of six rows timestamp: 'dt'; temperature: 'temp'; humidity: 'humidity; dew point:
+    # data set consists out of six rows timestamp: 'dt'; temperature: 'temp'; humidity: 'humidity; dew point:
     # 'dew_point'; wind: 'wind'; weather id: 'weather_id'
 
-    # newest timestamp in dataset
+    # last timestamp in data set
     newest = dataset.tail(1)
 
-    # all information on last rain
     # find all time stamps with rain
     rain = dataset.query('(weather_id >= 200) & (weather_id < 700)')
 
-    # ---
     # information on all "rains"
     # ---
 
@@ -48,7 +46,8 @@ def run(dataset):
 
         # all data on the rain
         # get timestamp change is bigger than 3600
-        col = ['dt_start', 'dt_end', 'idx_start', 'idx_end','weather_id', 'duration', 'rain_intensity', 'time_since_prevrain', 'temp_since_prevrain', 'wind_since_prevrain', 'humidity_since_prevrain']
+        col = ['dt_start', 'dt_end', 'idx_start', 'idx_end','weather_id', 'duration', 'rain_intensity',
+               'time_since_prevrain', 'temp_since_prevrain', 'wind_since_prevrain', 'humidity_since_prevrain']
         rain_data = pandas.DataFrame(columns=col)
 
         rain_len = rain.shape[0] - 1
