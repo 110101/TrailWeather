@@ -2,22 +2,26 @@ import M_owm_api as owm_api
 import P_conditionalgo as algo
 import pandas
 
-# demo lat long
-lat = str(48.07)
-lon = str(11.54)
+# dem lat long aberle
+lat = str(48.12152)
+lon = str(11.54549)
+# demo lat long isar trails
+# lat = str(48.07)
+# lon = str(11.54)
 
+48.12152, 11.54549
 # get UNIX timestamp
 timestamp = owm_api.time_now_UNIX()
 print(timestamp)
 
 # will be called from main loop later on
 # get hist data
-# owm_hist_dataset_return = owm_api.owm_hist_data(timestamp, lat, lon)
+owm_hist_dataset_return = owm_api.owm_hist_data(timestamp, lat, lon)
 
 # test data to csv
-owm_hist_dataset_return.to_csv("test.csv")
+owm_hist_dataset_return.to_csv("ref_test_data_city_but_200622.csv")
 
-owm_hist_dataset_return = pandas.read_csv("test.csv")
+# owm_hist_dataset_return = pandas.read_csv("synth_test_one_rain.csv", usecols=['dt','temp','humidity','dew_point','wind','weather_id','rain_mm'])
 
 # get forecast
 # owm_forecast_dataset_return = owm_api.owm_forecast_data(timestamp, lat, lon)
@@ -26,9 +30,9 @@ owm_hist_dataset_return = pandas.read_csv("test.csv")
 # owm_dataset_return = pandas.DataFrame([])
 # owm_dataset_return = owm_hist_dataset_return.append(owm_forecast_dataset_return, ignore_index=True)
 
-owm_dataset_return = owm_hist_dataset_return
+# owm_dataset_return = owm_hist_dataset_return
 
 # algo
-condition_prob = algo.run(owm_dataset_return)
+# condition_prob = algo.run(owm_dataset_return)
 
 print(condition_prob)
