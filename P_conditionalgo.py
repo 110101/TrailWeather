@@ -125,7 +125,7 @@ def run(dataset):
             print('time since rain: ' + str(time_since_rain) + 'h; rain intensity: ' + str(lastrain_intensity) + ' mm; avrg temp since last rain: ' + str(temp_since_rain))
 
             #
-            # formula / algo
+            # equation / algo
             #
 
             # algo paramter for surface type
@@ -135,9 +135,9 @@ def run(dataset):
 
             # the real deal:
             # -
-            prob_road = -(temp_since_rain/(road*24))*time_since_rain+1
-            prob_gravel = -(temp_since_rain/(gravel*24))*time_since_rain+1
-            prob_trail = -(temp_since_rain/(trail*24))*time_since_rain+1
+            prob_road = -(1/(road*24))*time_since_rain+1
+            prob_gravel = -(1/(gravel*24))*time_since_rain+1
+            prob_trail = -(1/(trail*24))*time_since_rain+1
 
         elif ts_lastrain > max_dry_time:
 
