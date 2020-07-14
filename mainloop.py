@@ -39,4 +39,8 @@ condition_prob = algo.run(owm_dataset_return)
 if condition_prob[0] and condition_prob[1] and condition_prob[2] == 2:
  print("it's raining")
 else:
- print(condition_prob)
+ road = condition_prob[0]
+ gravel = condition_prob[1]
+ trail = condition_prob[2]
+
+ print('road: ' + str(road) + ' / gravel: ' + str(gravel) + ' / trail: ' + str(trail))

@@ -49,7 +49,7 @@ def run(dataset):
 
             # all data on the rain
             # get timestamp change is bigger than 3600
-            col = ['dt_start', 'dt_end', 'idx_start', 'idx_end','weather_id', 'duration', 'rain_intensity',
+            col = ['dt_start', 'dt_end','weather_id', 'duration', 'rain_intensity',
                    'time_since_prevrain', 'temp_since_prevrain', 'wind_since_prevrain', 'humidity_since_prevrain']
             rain_data = pandas.DataFrame(columns=col)
 
@@ -60,93 +60,84 @@ def run(dataset):
             rain_end_ts = int(lastrain_row['dt'])
             rain_end_idx = rain.tail(1).index[0]
 
+            # time since rain until ref timestamp in hours
+            time_since_rain = ((ref_timestamp - rain_end_ts) / 3600) + 1
+
+            # temp since rain
+            temp_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['temp'].mean()
+
+            # wind since rain
+            wind_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['wind'].mean()
+
+            # humidity since rain
+            hum_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['humidity'].mean()
+
             rain_len = rain.shape[0] - 1
-            for row in range(rain_len,1,-1):
+            for row in range(rain_len,0,-1):
                 test = row
-                if rain.iloc[row]['dt'] - rain.iloc[row-1]['dt'] > 3600:
-                    # time since rain until ref timestamp
-                    time_since_rain = ((ref_timestamp - rain_end_ts) / 3600) + 1
+                if row != 0:
+                    if rain.iloc[row]['dt'] - rain.iloc[row-1]['dt'] > 3600:
+                        # start of rain
+                        rain_start_ts = rain.iloc[row]['dt']
+                        # rain_start_idx = rain[rain['dt'] == rain.iloc[row]['dt']].index[0]
 
-                    # temp since rain
-                    temp_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['temp'].mean()
+                        # rain duration
+                        rain_duration = ((rain_end_ts - rain_start_ts) / 3600) + 1
 
-                    # wind since rain
-                    wind_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['wind'].mean()
+                        # rain intensity
+                        rain_intensity = rain.query('dt >= @rain_start_ts and dt <= @rain_end_ts')['rain_mm'].sum()
 
-                    # humidity since rain
-                    hum_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['humidity'].mean()
+                        # filter for only relevant rain
+                        if (rain_intensity > 0.5):
+                            # rain object
+                            rain_data = rain_data.append(
+                                {'dt_start': rain_end_ts, 'dt_end': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,
+                                 'intnsty': rain_intensity }, ignore_index=True)
 
-                    # initial trail condition
-                    # ---
-                    # start of rain
-                    rain_start_ts = rain.iloc[row]['dt']
-                    rain_start_idx = rain[rain['dt'] == rain.iloc[row]['dt']].index[0]
+                        # update rain_end with next "rain block" from data set and reference timestamp
+                        rain_end_ts = rain.iloc[row-1]['dt']
+                        ref_timestamp = rain_start_ts
 
-                    # rain duration
-                    rain_duration = ((rain_end_ts - rain_start_ts) / 3600) + 1
+                    elif (rain.iloc[row]['dt'] - rain.iloc[row-1]['dt'] == 3600) and (row == 1):
+                        rain_start_ts = rain.iloc[row-1]['dt']
 
-                    # rain intensity
-                    rain_intensity = rain.query('dt >= @rain_start_ts and dt <= @rain_end_ts')['rain_mm'].sum()
+                        # rain duration
+                        rain_duration = ((rain_end_ts - rain_start_ts) / 3600) + 1
 
-                    # equation goes here
-                    # ...
+                        # rain intensity
+                        rain_intensity = rain.query('dt >= @rain_start_ts and dt <= @rain_end_ts')['rain_mm'].sum()
 
+                        if (rain_intensity > 0.5):
+                            # rain object
+                            rain_data = rain_data.append(
+                                {'dt_start': rain_end_ts, 'dt_end': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,
+                                 'intnsty': rain_intensity }, ignore_index=True)
 
-                    # rain object
-                    rain_data = rain_data.append(
-                        {'dt_start': rain_end_ts, 'dt_end': rain.iloc[row]['dt'], 'weather_id': rain.iloc[row]['weather_id'], 'duration': rain_duration,
-                         'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
-                    # update rain_end with next "rain block" from data set and reference timestamp
-                    rain_end_ts = rain.iloc[row-1]['dt']
-                    ref_timestamp = rain_start_ts
-                    ref_idx = rain_start_idx
+                        # update rain_end with next "rain block" from data set and reference timestamp
+                        rain_end_ts = rain.iloc[row-1]['dt']
+                        ref_timestamp = rain_start_ts
 
-            # duration of last rain
-            lastrain_duration = int(lastrain_row['dt']) - rain_end_ts
+            # duration of last rain - MVP - only consider last rain and its duration
+            lastrain_duration = float(rain_data.tail(1)['duration'])
+            lastrain_intensity = float(rain_data.tail(1)['intnsty'])
 
-            # intensity of last rain
+            # test output
+            print('time since rain: ' + str(time_since_rain) + 'h; rain intensity: ' + str(lastrain_intensity) + ' mm; avrg temp since last rain: ' + str(temp_since_rain))
 
+            #
+            # formula / algo
+            #
 
-            # add last rain to rain_data dataset
-            rain_data = rain_data.append(
-               {'dt': int(lastrain_row['dt']), 'weather_id': int(lastrain_row['weather_id']), 'duration': lastrain_duration,
-                 'intnsty_avrg': 0, 'intnsty_peak': 0}, ignore_index=True)
+            # algo paramter for surface type
+            road = 1
+            gravel = 1.5
+            trail = 2
 
-            # ----
-            # Temperatur
-            # Temp curve between rain
-            # ----
-            # average temp since last rain
-            # index_lastrain = lastrain.index.values[0]
-            index_newest = newest.index.values[0]
-            # if index_newest != index_newest:
-            temp_curve_lastrain = dataset[130:index_newest]['temp']
-            # else:
-                # print("currently raining")
-
-            # duration_last_rain_r = duration_last_rain.time_now_UNIX()
-
-            #test output dataset
-            # first_rain = t_last_rain.iloc[0]
-
-            #reverse dataset
-            # reversed_rain = ts_lastrain.iloc[::-1]
-
-            # ----
-            # Humidity
-            # Humidity curve between rain
-            # ----
-
-            # ----
-            # Wind
-            # Wind intensity between rain
-            # ----
-
-            # second shortcut
-
-            prob_road = 0.5
-            prob_gravel = 0.5
-            prob_trail = 0.5
+            # the real deal:
+            # -
+            prob_road = -(temp_since_rain/(road*24))*time_since_rain+1
+            prob_gravel = -(temp_since_rain/(gravel*24))*time_since_rain+1
+            prob_trail = -(temp_since_rain/(trail*24))*time_since_rain+1
 
         elif ts_lastrain > max_dry_time:
 
@@ -156,6 +147,7 @@ def run(dataset):
 
     elif ts_lastrain == 0:
 
+        # it's raining, let's get dirty or shred on an other day!
         prob_road = 2
         prob_gravel = 2
         prob_trail = 2
