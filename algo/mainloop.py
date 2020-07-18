@@ -29,29 +29,31 @@ owm_hist_dataset_return = pandas.read_csv("ref_data/synth_test_one_rain.csv",
 
 # algo
 condition_prob = algo.run(owm_hist_dataset_return)
+
+# cluster slgo return
 iteration = 0
 for prob in condition_prob:
     # setting ids for output / selecting image
     # 0: dry
-    # 20: nearly dry, only some puddle of mud
-    # 40: some puddle of muds in not sun covered areas
-    # 60: puddle of muds
-    # 80: wet
-    # 100: it's raining
+    # 1: nearly dry, only some last puddle of mud in uneven areas
+    # 2: some puddle of muds in not sun covered areas
+    # 3: muddy
+    # 4: wet
+    # 5: it's raining
     print (prob)
 
     if prob < 0.20:
         prob_clustered = 0
     elif 0.20 < prob < 0.40:
-        prob_clustered = 20
+        prob_clustered = 1
     elif 0.40 < prob < 0.60:
-        prob_clustered = 40
+        prob_clustered = 2
     elif 0.60 < prob < 0.80:
-        prob_clustered = 60
+        prob_clustered = 3
     elif 0.80 < prob < 1:
-        prob_clustered = 80
+        prob_clustered = 4
     elif prob == 1 or prob == 100:
-        prob_clustered = 100
+        prob_clustered = 5
 
     if iteration == 0:
         prob_road_clustered = prob_clustered
