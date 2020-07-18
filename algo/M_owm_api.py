@@ -1,8 +1,7 @@
 import requests
-import certifi
-import M_apikey
+from algo import M_apikey
 import pandas
-from datetime import timezone, datetime
+from datetime import datetime
 
 
 def owm_hist_data(time, lat, lon):

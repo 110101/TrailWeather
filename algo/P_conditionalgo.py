@@ -118,8 +118,8 @@ def run(dataset):
 
                 # duration of last rain - MVP - only consider last rain and its duration
                 if rain_data.empty == False:
-                    lastrain_duration = float(rain_data.tail(1)['duration'])
-                    lastrain_intensity = float(rain_data.tail(1)['intnsty'])
+                    lastrain_duration = float(rain_data.head(1)['duration'])
+                    lastrain_intensity = float(rain_data.head(1)['intnsty'])
 
                     if lastrain_intensity > 0.1:
                         # test output
@@ -143,7 +143,6 @@ def run(dataset):
                         # prob_road = -(1/(road_faktor*std_drytime)*(temp_factor/50))*time_since_rain+1
                         prob_gravel = -(1/(gravel_faktor*base_equation))*time_since_rain+1
                         prob_trail = -(1/(trail_faktor*base_equation))*time_since_rain+1
-
                     else:
                         prob_road = 0
                         prob_gravel = 0
@@ -158,9 +157,9 @@ def run(dataset):
         elif ts_lastrain == 0:
 
             # it's raining, let's get dirty or shred on an other day!
-            prob_road = 2
-            prob_gravel = 2
-            prob_trail = 2
+            prob_road = 100
+            prob_gravel = 100
+            prob_trail = 100
 
 
     else:
