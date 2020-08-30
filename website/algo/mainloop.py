@@ -1,4 +1,4 @@
-from algo import M_owm_api as owm_api, P_conditionalgo as algo
+import M_owm_api as owm_api, P_conditionalgo as algo
 import pandas
 
 # dem lat long city

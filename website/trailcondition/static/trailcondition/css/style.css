@@ -1,0 +1,271 @@
+/* main style sheet */
+
+html{
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	background-color: #e0e0e0;
+	height:100%;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+/* typography */
+
+h1 {
+    color: #FFFFFF;
+}
+
+header {
+	width: 100%;
+	background: url('/static/trailcondition/images/eric-muhr-Duj61Qi9WQQ-unsplash.jpg');
+	resize: both;
+	-ms-background-size: cover;
+	-o-background-size: cover;
+	-moz-background-size: cover;
+	-webkit-background-size: cover;
+	background-size: cover;
+}
+
+.logo_img {
+    background-color: blue;
+    -webkit-border-radius: 50%;
+    height: 200px;
+    margin: auto;
+    margin-top: 50px;
+    width: 200px;
+    z-index: 10;
+		position: relative;
+}
+
+.logo_center {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+	margin-bottom: 20px;
+	z-index: 10;
+	position: relative;
+}
+
+.text_center {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+	margin-bottom: 50px;
+	z-index: 10;
+	color: green;
+	position: relative;
+}
+
+.text_center span {
+	background-image: linear-gradient(to right, green , green );
+	background-position: -100px 10px;
+	background-repeat: repeat-x;
+	background-size: 100px 100px;
+	color: #ffffff;
+	line-height: 30px;
+	font-size: 22px;
+}
+
+.button_center {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+	margin-bottom: 50px;
+	position: relative;
+	z-index: 10;
+}
+
+.selectbutton {
+	background-color: #ffffff;
+	padding: 10px 20px 10px 20px;
+	-webkit-border-radius: 20px;
+	text-decoration: none;
+}
+.selectbutton:hover {
+		color: #ffffff;
+		background-color: green;
+		transition: background-color .3s ease-in-out;
+		text-decoration: none;
+	}
+
+.cover {
+	background-color: #102000;
+	opacity: 0.5;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#main {
+	z-index: 10;
+}
+
+#inputbox {
+    visibility: hidden;
+    height: 0px;
+    background-color: red;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+		border-top: 1px solid #000000;
+		border-bottom: 1px solid #000000;
+}
+
+.popupbutton {
+    background-color: white;
+    width: 50px;
+    height: 20px;
+    border: 2px solid blue;
+    -webkit-border-radius: 10px;
+    text-align: center;
+}
+
+.info {
+	background-color: #00415F;
+	width: 100%;
+	display: grid;
+	grid-template-columns: 33% 33% 33%;
+	grid-column-gap: 6px;
+	color: #ffffff;
+}
+
+.info_col1 {
+	display: grid;
+	grid-columns: 1;
+	padding: 20px 50px 40px 50px;
+}
+
+.info_col2 {
+	display: inline-grid;
+	grid-columns: 2;
+	padding: 20px 50px 40px 50px;
+}
+
+.info_col3 {
+	display: inline-grid;
+	grid-columns: 3;
+	padding: 20px 50px 40px 50px;
+}
+
+footer {
+width: 100%;
+bottom: 0;
+background-color: #00283A;
+color: grey;
+text-align: center;
+color: #d0d0d0;
+z-index: 10;
+}
+
+#spinner {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #e0e0e0;
+     z-index: 9999;
+
+}
+
+/* spinner */
+.spinner_hidden {
+    visibility: hidden;
+    opacity: 0;
+    /* transition: opacity .3s ease-in-out; */
+}
+
+.spinner_loading {
+    visibility: visible;
+    opacity: 1;
+    /* transition: opacity .3s ease-in-out; */
+}
+
+/* elipse */
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+/* result */
+#resultmap {
+	height: 300px;
+width: 500px;
+margin: 0px auto;
+}
+
+.result_grid {
+	display: grid;
+	grid-template-columns: 50% 50%;
+
+}
+
+.result_col1 {
+	border-right: 1px dotted #000;
+
+}
+
+.result_col2 {
+
+}

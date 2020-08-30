@@ -1,3 +1,4 @@
 # Project exclude paths
 /venv/
-/algo/M_apikey.py
+/website/algo/M_apikey.py
+/website/website/settings.py

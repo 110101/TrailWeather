@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/css/jquery-ui.css' %}"/>
+	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/css/style.css' %}" />
+	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/leaflet/leaflet.css' %}"/>
+    <title>Title</title>
+</head>
+<body>
+<div class="logo_center">
+  <h1>Trail Condor</h1>
+</div>
+
+  <div id="main">
+      <div id="inputbox">
+    <form id="myform" name="myform">
+    {% csrf_token %}
+        <input type="text" name="lat" id="lat" value={{ lat }}>
+        <input type="text" name="lon" id="lng" value={{ lng }}>
+    </form>
+</div>
+    <div id="resultmap"></div>
+    <div class="result_grid">
+      <div class="result_col1">
+        <div class="icon">
+          <p>empty</p>
+        </div>
+        <div class="content">
+          {% if rain_status == "1" %}
+            <ul>There was rain in the past 5 days.</ul>
+            <ul>Time since last rain: {{ time_since_rain_h }}</ul>
+          {% elif rain_status == "50" %}
+            <p>It's still raining right now.</p>
+          {% else %}
+            <p>nothing here</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="result_col2">
+      </div>
+    </div>
+    <div class="button_center">
+        <a class="selectbutton" href="{% url 'trailcondition:index' %}">back</a>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="{% static 'trailcondition/leaflet/leaflet.js' %}"></script>
+<script type="text/javascript" src="{% static 'trailcondition/js/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'trailcondition/js/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'trailcondition/js/stamen.js' %}"></script>
+<script>
+  function initmap(defaultlat, defaultlong){
+
+    var lat = document.getElementById('lat').value;
+    var lng = document.getElementById('lng').value;
+
+    var tilelayer = new L.StamenTileLayer("terrain");
+    tilelayer.options.maxZoom = 20;
+    tilelayer.options.minZoom = 5; //12
+
+    // map = new L.Map('map').setView([defaultlat, defaultlong], 12);
+    map = L.map('resultmap', {center: [lat, lng], zoom: 12, scrollWheelZoom: false, touchZoom: false, zoomControl: false, dragging: false, doubleClickZoom: false, boxZoom: false});
+    map.addLayer(tilelayer);
+
+    L.marker([lat, lng]).addTo(map);
+
+
+    // map.on('click', onMapClick);
+
+  }
+
+initmap();
+
+</script>
+</html>

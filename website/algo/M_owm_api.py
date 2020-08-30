@@ -1,4 +1,5 @@
 import requests
+# from algo
 from algo import M_apikey
 import pandas
 from datetime import datetime
@@ -54,6 +55,8 @@ def owm_hist_data(time, lat, lon):
             string = {"dt": int(owm_dataset_raw[x]["dt"]),"temp": temp_celsius, "humidity": owm_dataset_raw[x]["humidity"], "dew_point": dewpoint, "wind": wind, "weather_id": weather_id, "rain_mm": rain_mm}
             owm_dataset_processed.append(string)
 
+        # if ("500" in owm_dataset_processed.values() == True):
+        #    break
 
     # for  in owm_feedback_json["hourly"]
     owm_df_proccesed = pandas.DataFrame(owm_dataset_processed)
