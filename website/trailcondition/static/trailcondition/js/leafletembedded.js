@@ -38,9 +38,9 @@ function onMapClick(e) {
         document.getElementById("lat").value = lat;
         document.getElementById("lng").value = lng;
 
-    popup
+    var popup = L.popup({closeButton: false})
         .setLatLng(e.latlng)
-        .setContent('<div class="popupbutton"><a class="popuplink" rel="import" href="javascript: submitform()">go<a></div>')
+        .setContent('<div class="popupbutton"><a class="popuplink" rel="import" href="javascript: submitform()">select<a></div>')
         .openOn(map);
 
 }
