@@ -4,7 +4,13 @@ from datetime import datetime
 # abbriviations
 # ts - timestamp
 
-def run(dataset):
+def hoursindays(time):
+    days = int(time / 24)
+    hours = int(time - (24*days))
+
+    return days, hours
+
+def run(dataset, lat, lon):
     # data set consists out of six rows timestamp: 'dt'; temperature: 'temp'; humidity: 'humidity; dew point:
     # 'dew_point'; wind: 'wind'; weather id: 'weather_id'
 
@@ -26,6 +32,8 @@ def run(dataset):
         ref_timestamp = int(datetime.now(tz=None).timestamp())
 
         ts_lastrain = (int(newest['dt']) - int(lastrain_row['dt']))
+
+        rain_commulated_l5days = rain['rain_mm'].sum()
 
         # xxx_may_dry_time in seconds / default 5 days
         max_dry_time = 432000
@@ -51,6 +59,9 @@ def run(dataset):
                 # time since rain until ref timestamp in hours
                 # -1 because of 1 hour blocks in the data set
                 time_since_rain = ((ref_timestamp - rain_end_ts) / 3600) - 1
+                time_since_rain = hoursindays(time_since_rain)
+                time_since_rain_days = time_since_rain[0]
+                time_since_rain_hours = time_since_rain[1]
 
                 # temp since rain
                 temp_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['temp'].mean()
@@ -120,23 +131,26 @@ def run(dataset):
         elif ts_lastrain > max_dry_time:
             # last rain to long ago
             rain_status = 0  # no rain > 0
-            time_since_rain = 99  # not relevant > 99
+            time_since_rain_days = 99  # not relevant > 99
+            time_since_rain_hours = 99
             lastrain_duration = 99  # not relevant > 99
             lastrain_intensity = 99  # not relevant > 99
 
         elif ts_lastrain == 0:
             # it's raining, let's get dirty or shred on an other day!
             rain_status = 50            # it's raining > 50
-            time_since_rain = 50         # it's raining > 50
+            time_since_rain_days = 0        # it's raining > 50
+            time_since_rain_hours = 0
             lastrain_duration = 99      # not relevant > 99
             lastrain_intensity = 99     # not relevant > 99
 
     else:
         # no rain
         rain_status = 0  # no rain > 0
-        time_since_rain = 99  # not relevant > 99
+        time_since_rain_days = 99  # not relevant > 99
+        time_since_rain_hours = 99
         lastrain_duration = 99  # not relevant > 99
         lastrain_intensity = 99  # not relevant > 99
 
-    return {'rain_status': rain_status, 'time_since_rain_h': str(time_since_rain), 'lastrain_duration_h': str(lastrain_duration), 'lastrain_intensity_mm': str(lastrain_intensity)}
+    return {'rain_status': rain_status, 'time_since_rain_days': str(time_since_rain_days), 'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration), 'lastrain_intensity_mm': str(lastrain_intensity), 'rain_commulated_l5days_mm': str(rain_commulated_l5days), 'lat': str(lat), 'lon': str(lon)}
 

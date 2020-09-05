@@ -18,7 +18,7 @@ def result(request):
     lon = str(request.POST.get('lon', None))
     # result = run_algo.get_weather_data(lat, lon)
     result = run_algo.test(lat, lon)
-    html = {"time_since_rain_h": str(result["time_since_rain_h"]), "lastrain_duration_h": str(result["lastrain_duration_h"]), "rain_status": str(result["rain_status"]), "lastrain_intensity_mm": str(result["lastrain_intensity_mm"]), "lat": str(result["lat"]), "lng": str(result["lng"])}
+    html = {"time_since_rain_days": str(result["time_since_rain_days"]), "time_since_rain_hours": str(result["time_since_rain_hours"]), "lastrain_duration_h": str(result["lastrain_duration_h"]), "rain_status": str(result["rain_status"]), "lastrain_intensity_mm": str(result["lastrain_intensity_mm"]), "rain_commulated_l5days_mm": str(result["rain_commulated_l5days_mm"]), "lat": str(result["lat"]), "lng": str(result["lng"])}
     return HttpResponse(template.render(html, request))
     # input_result = get_object_or_404(pk=input_lat_lon)
     # input_lat_lon = request.POST.get('input', False)

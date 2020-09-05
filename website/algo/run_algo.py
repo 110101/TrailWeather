@@ -4,11 +4,13 @@ import pandas
 
 def test(lat, lng):
     rain_status = 1
-    time_since_rain = 23
+    time_since_rain_days = 4
+    time_since_rain_hours = 22
     lastrain_duration = 1
-    lastrain_intensity =  50
+    lastrain_intensity =  0.5
+    rain_commulated_l5days = 5.0
 
-    return {'rain_status': rain_status, 'time_since_rain_h': str(time_since_rain), 'lastrain_duration_h': str(lastrain_duration), 'lastrain_intensity_mm': str(lastrain_intensity), 'lat': str(lat), 'lng': str(lng)}
+    return {'rain_status': rain_status, 'time_since_rain_days': str(time_since_rain_days),'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration), 'lastrain_intensity_mm': str(lastrain_intensity), 'rain_commulated_l5days_mm': str(rain_commulated_l5days), 'lat': str(lat), 'lng': str(lng)}
 
 def calc_prob (condition_prob):
     # cluster slgo return
@@ -72,7 +74,7 @@ def get_weather_data(lat, lon):
     #                                                   'rain_mm'])
 
     # algo
-    condition_feedback = process.run(owm_hist_dataset_return)
+    condition_feedback = process.run(owm_hist_dataset_return, lat, lon)
 
     return condition_feedback
 
@@ -80,8 +82,8 @@ def get_weather_data(lat, lon):
     # print('road: ' + str(prob_road_clustered) + ' / gravel: ' + str(prob_gravel_clustered) + ' / trail: ' + str(prob_trail_clustered))
 
 # just for testing
-# lat = str(48.07)
-#lon = str(11.54)
+lat = str(48.07)
+lon = str(11.54)
 
-#feedb = get_weather_data(lat, lon)
+feedb = get_weather_data(lat, lon)
 # print(feedb)

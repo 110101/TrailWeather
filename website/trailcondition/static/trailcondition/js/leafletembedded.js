@@ -40,7 +40,7 @@ function onMapClick(e) {
 
     popup
         .setLatLng(e.latlng)
-        .setContent('<div class="popupbutton"><a class="popuplink" rel="import" href="javascript: submitform()">go<a></div>' + "You clicked the map at Lat: " + lat + " and long: " + lng)
+        .setContent('<div class="popupbutton"><a class="popuplink" rel="import" href="javascript: submitform()">go<a></div>')
         .openOn(map);
 
 }

@@ -10,10 +10,18 @@
     <title>Title</title>
 </head>
 <body>
+<header>
 <div class="logo_center">
   <h1>Trail Condor</h1>
 </div>
-
+<div class="resultlocation">
+  <div class="text_center">
+    <p><span>{{ lat }}, {{ lng }}</span></p>
+  </div>
+      </div>
+    <div id="resultmap"></div>
+    <div class="cover"></div>
+</header>
   <div id="main">
       <div id="inputbox">
     <form id="myform" name="myform">
@@ -22,30 +30,58 @@
         <input type="text" name="lon" id="lng" value={{ lng }}>
     </form>
 </div>
-    <div id="resultmap"></div>
+
+
+
     <div class="result_grid">
-      <div class="result_col1">
-        <div class="icon">
-          <p>empty</p>
-        </div>
-        <div class="content">
-          {% if rain_status == "1" %}
-            <ul>There was rain in the past 5 days.</ul>
-            <ul>Time since last rain: {{ time_since_rain_h }}</ul>
-          {% elif rain_status == "50" %}
-            <p>It's still raining right now.</p>
-          {% else %}
-            <p>nothing here</p>
-          {% endif %}
-        </div>
-      </div>
-      <div class="result_col2">
-      </div>
+      <div class="result_col1"></div>
+      <div class="result_col2"></div>
     </div>
-    <div class="button_center">
+    <div class="content">
+      <div class="box1">
+      {% if rain_status == "1" %}
+        <ul>There was rain in the past five days.</ul>
+        <p> Total amount of rain in the last 5 days in mm: {{ rain_commulated_l5days_mm }} mm</p>
+
+      {% elif rain_status == "50" %}
+        <p>It's currently raining right now.</p>
+      {% elif rain_status == "0" %}
+        <p>There was no rain in the last five days.</p>
+      {% else %}
+        <p>Ups, something went wrong. Please try again</p>
+      {% endif %}
+      </div>
+      <div class="result_grid">
+        <div class="result_col1"></div>
+        <div class="result_col2"></div>
+      </div>
+      {% if rain_status == "1" %}
+        <div class="box2">
+            <ul>Time since last rain: {{ time_since_rain_days }} days, {{ time_since_rain_hours }} hours</ul>
+            {% if lastrain_duration_h == "1" %}
+            <p> Duration of last rain: <{{ lastrain_duration_h }} hour</p>
+            {% else %}
+            <p> Duration of last rain: {{ lastrain_duration_h}} hours</p>
+            {% endif %}
+            <p class="bold"> Intensity of last rain:</p>
+            <p>{{ lastrain_intensity_mm }} mm/m</p>
+        </div>
+      {% else %}
+        {% endif %}
+
+    <div class="result_grid">
+      <div class="result_col1"></div>
+      <div class="result_col2"></div>
+    </div>
+    <div class="button_center_result">
         <a class="selectbutton" href="{% url 'trailcondition:index' %}">back</a>
     </div>
+    </div>
   </div>
+  <footer>
+    <p>Copyright (c) 2018 Copyright Holder All Rights Reserved.</p>
+      <p>Crafted with love in Munich. Europe. Earth.</p>
+  </footer>
 </body>
 <script type="text/javascript" src="{% static 'trailcondition/leaflet/leaflet.js' %}"></script>
 <script type="text/javascript" src="{% static 'trailcondition/js/jquery-3.3.1.min.js' %}"></script>
