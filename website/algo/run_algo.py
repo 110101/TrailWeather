@@ -9,8 +9,11 @@ def test(lat, lng):
     lastrain_duration = 1
     lastrain_intensity =  0.5
     rain_commulated_l5days = 5.0
+    cors_road = "dry"
+    cors_gravel = "mostly dry"
+    cors_trail = "wet"
 
-    return {'rain_status': rain_status, 'time_since_rain_days': str(time_since_rain_days),'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration), 'lastrain_intensity_mm': str(lastrain_intensity), 'rain_commulated_l5days_mm': str(rain_commulated_l5days), 'lat': str(lat), 'lng': str(lng)}
+    return {'rain_status': rain_status, 'time_since_rain_days': str(time_since_rain_days),'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration), 'lastrain_intensity_mm': str(lastrain_intensity), 'rain_commulated_l5days_mm': str(rain_commulated_l5days), 'cors_road': str(cors_road), 'cors_gravel': str(cors_gravel), 'cors_trail': str(cors_trail), 'lat': str(lat), 'lng': str(lng)}
 
 def calc_prob (condition_prob):
     # cluster slgo return

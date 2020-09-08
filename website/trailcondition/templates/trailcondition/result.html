@@ -38,37 +38,69 @@
       <div class="result_col2"></div>
     </div>
     <div class="content">
-      <div class="box1">
+      <div class="box">
       {% if rain_status == "1" %}
-        <ul>There was rain in the past five days.</ul>
-        <p> Total amount of rain in the last 5 days in mm: {{ rain_commulated_l5days_mm }} mm</p>
+        <img class="large_icon" src="/static/trailcondition/images/icon_rain_large.png"></img>
+        <h4>There was rain in the past five days.</h4>
+        <h4> Total amount of rain in the last 5 days in mm: </h4>
+        <span class="result_text">{{ rain_commulated_l5days_mm }} mm</span>
 
       {% elif rain_status == "50" %}
         <p>It's currently raining right now.</p>
       {% elif rain_status == "0" %}
-        <p>There was no rain in the last five days.</p>
+        <img class="large_icon" src="/static/trailcondition/images/icon_sun_large.png"></img>
+        <h4>There was no rain in the past five days.</h4>
+        <span class="result_text">Enjoy the great outdoors.</span>
       {% else %}
-        <p>Ups, something went wrong. Please try again</p>
+        <span class="result_text">Ups, something went wrong. Please try again</span>
       {% endif %}
       </div>
       <div class="result_grid">
-        <div class="result_col1"></div>
+        <div class="result_col11"></div>
         <div class="result_col2"></div>
       </div>
       {% if rain_status == "1" %}
-        <div class="box2">
-            <ul>Time since last rain: {{ time_since_rain_days }} days, {{ time_since_rain_hours }} hours</ul>
+        <div class="box">
+            <h4>Time since last rain:</h4>
+            <span class="result_text">{{ time_since_rain_days }} days, {{ time_since_rain_hours }} hours</span>
             {% if lastrain_duration_h == "1" %}
-            <p> Duration of last rain: <{{ lastrain_duration_h }} hour</p>
+            <h4> Duration of last rain:</h4>
+            <span class="result_text"><{{ lastrain_duration_h }} hour</span>
             {% else %}
-            <p> Duration of last rain: {{ lastrain_duration_h}} hours</p>
+            <h4> Duration of last rain:</h4>
+            <span class="result_text">{{ lastrain_duration_h }} hours</span>
             {% endif %}
-            <p class="bold"> Intensity of last rain:</p>
-            <p>{{ lastrain_intensity_mm }} mm/m</p>
+            <h4>Intensity of last rain:</h4>
+            <span class="result_text">{{ lastrain_intensity_mm }} mm/m</span>
+
+        </div>
+        <div class="result_grid">
+          <div class="result_col1"></div>
+          <div class="result_col2"></div>
         </div>
       {% else %}
         {% endif %}
 
+        <div class="box3">
+          <h4>Probable Condition of Road Surface</h4>
+          <div class="result_surface_box">
+            <div class="minibox">
+              <img class="result_surface_icon" src="/static/trailcondition/images/icon_road.png"></img>
+              <h5>Road</h5>
+              <p>{{ cors_road }}</p>
+            </div>
+            <div class="minibox">
+              <img class="result_surface_icon" src="/static/trailcondition/images/icon_gravel.png"></img>
+              <h5>Gravel</h5>
+              <p>{{ cors_gravel }}</p>
+            </div>
+            <div class="minibox">
+              <img class="result_surface_icon" src="/static/trailcondition/images/icon_trail.png"></img>
+              <h5>Trail</h5>
+              <p>{{ cors_trail }}</p>
+            </div>
+          </div>
+        </div>
     <div class="result_grid">
       <div class="result_col1"></div>
       <div class="result_col2"></div>
