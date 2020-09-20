@@ -20,6 +20,10 @@ function initmap(){
 	map = L.map('map', {center: [defaultlat, defaultlong], zoom: 12, scrollWheelZoom: false});
 	map.addLayer(tilelayer);
 
+	// adding additional control button
+	var container = L.DomUtil.create('input');
+  container.type="button";
+
 	map.on('click', onMapClick);
 
 	map.once('focus', function() { map.scrollWheelZoom.enable(); });
@@ -69,21 +73,26 @@ function overpassapi (lat, lng){
 }
 
 function locate_user(){
-	map.locate({watch: true, setView: false, maxZoom: 18, maximumAge: 60000, enableHighAccuracy: true})
-	//map.locate()
-
 	function onLocationFound(e){
 		var radius = e.accuracy / 2;
 		var heading = e.accuracy;
 		var timestamp_act = e.timestamp;
 
 		/* $("#location").style.color = '#007bff'; <- Funktioniert noch nicht */
-		map.setView(e.latlng, 18);
-		L.circle(e.latlng, radius).addTo(map);
+		map.setView(e.latlng, 17);
 
-		/* L.marker(e.latlng).addTo(map)
-        .bindPopup("You are within " + heading + " meters from this point").openPopup(); */
-        //map.on('movestart', onMoveStart);
+		onMapClick(e);
+		// document.getElementById("lat").value = lat;
+		// document.getElementById("lng").value = lng;
+		//
+		// var popup = L.popup({closeButton: false})
+		// 		.setLatLng(e.latlng)
+		// 		.setContent('<div class="popupbutton"><a class="popuplink" rel="import" href="javascript: submitform()">select<a></div>')
+		// 		.openOn(map);
+
 	}
+
+	map.locate({watch: false, setView: false, maxZoom: 18, maximumAge: 60000, enableHighAccuracy: true})
+
 	map.on('locationfound', onLocationFound);
 }

@@ -253,7 +253,7 @@
 	}
 
 	.leaflet-container a:hover {
-		color: green;
+		color: #7FAFBF;
 		}
 .leaflet-container a.leaflet-active {
 	outline: 2px solid orange;
