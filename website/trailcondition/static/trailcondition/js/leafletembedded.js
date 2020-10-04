@@ -13,11 +13,11 @@ function onMoveStart(e){
 
 function initmap(){
 	var tilelayer = new L.StamenTileLayer("terrain");
-	tilelayer.options.maxZoom = 20;
-	tilelayer.options.minZoom = 5; //12
+	tilelayer.options.maxZoom = 18;
+	tilelayer.options.minZoom = 4; //12
 
 	// map = new L.Map('map').setView([defaultlat, defaultlong], 12);
-	map = L.map('map', {center: [defaultlat, defaultlong], zoom: 12, scrollWheelZoom: false});
+	map = L.map('map', {center: [defaultlat, defaultlong], zoom: 13, scrollWheelZoom: false});
 	map.addLayer(tilelayer);
 
 	// adding additional control button

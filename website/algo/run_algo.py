@@ -18,8 +18,8 @@ def test(lat, lng):
     cors_gravel = "dry"
     cors_trail = "dry"
 
-    cos_feedback = calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, rain_commulated_l5days,
-                     temp_avrg_l5days, wind_avrg_l5days, hum_avrg_l5days)
+    cos_feedback = calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_intensity,
+                            rain_commulated_l5days, temp_avrg_l5days, wind_avrg_l5days, hum_avrg_l5days)
 
     return {'rain_status': str(rain_status), 'time_since_rain_days': str(time_since_rain_days),
             'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration),
@@ -30,10 +30,10 @@ def test(lat, lng):
 # abbriviations
 # ts - timestamp
 
-
-def hoursindays(time):
-    days = int(time / 24)
-    hours = int(time - (24*days))
+# duration in minutes converted in to days, hours
+def hoursindays(duration):
+    days = int(duration / 24)
+    hours = int(duration - (24*days))
 
     return days, hours
 
@@ -46,7 +46,7 @@ def run(dataset, lat, lon):
     newest = dataset.tail(1)
 
     # find all time stamps with rain
-    rain = dataset.query('(weather_id >= 200) & (weather_id < 700) & (rain_mm > 0)')
+    rain = dataset.query('(weather_id >= 200) & (weather_id < 700) & (rain_mm > 0.2)')
     print(rain)
 
     # information on all "rains"
@@ -181,7 +181,7 @@ def run(dataset, lat, lon):
         wind_avrg_l5days = 99
         hum_avrg_l5days = 99
 
-    cos = calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, rain_commulated_l5days,
+    cos = calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_intensity, rain_commulated_l5days,
                      temp_avrg_l5days, wind_avrg_l5days, hum_avrg_l5days)
 
     return {'rain_status': str(rain_status), 'time_since_rain_days': str(time_since_rain_days),
@@ -191,15 +191,15 @@ def run(dataset, lat, lon):
             'lat': str(lat), 'lon': str(lon)}
 
 
-def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, amount_of_rain, avrg_temp, avrg_wind, avrg_hum):
+def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_intensity, amount_of_rain, avrg_temp, avrg_wind, avrg_hum):
 
     # init of needed dicts and parameters
     diff_dry_time_dict = {}
     cos = {}
     key = ["road", "gravel", "trail"]
     it = 0
-    f_roadfaktor = 0
-    f_trailfaktor = 0
+    f_roadfaktor = 0.5
+    f_trailfaktor = -0.1
 
     # look up table for environment paramets with influence on dry time
     # trimed for gravel surface
@@ -210,6 +210,7 @@ def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, amount_of
     # look up of temp factor (f)
     # simplified look up via first int digit as string
     str_avrg_temp_full = str(round(avrg_temp))
+    print("Temp:" + str(avrg_temp))
     str_avrg_temp = str_avrg_temp_full[0]
     if str_avrg_temp == "-":
         str_avrg_temp = str_avrg_temp_full[0] + str_avrg_temp_full[1]
@@ -247,11 +248,13 @@ def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, amount_of
     for f in f_sum:
         # equation: 0 = -sum_lookup * time_till_dry + amount_of_rain_l5days
         # time till surface is dry under given parameters aka factors (f)
-        dry_time = -(amount_of_rain) / -(f)
+        dry_time = -(lastrain_intensity) / -(f)
+        print(f)
 
         # diff between time since last rain and needed time 2 dry "dry_time"
         if dry_time != 0:
             diff_dry_time = round(time_since_rain / dry_time, 1)
+            print("drytime:" + str(diff_dry_time))
         else:
             diff_dry_time = 1
 
@@ -306,5 +309,5 @@ def get_weather_data(lat, lon):
 lat = str(48.07)
 lon = str(11.54)
 
-feedb = test(lat, lon)
+# feedb = test(lat, lon)
 # print(feedb)

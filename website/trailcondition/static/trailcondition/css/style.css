@@ -99,8 +99,9 @@ header {
 
 .logo_subtext {
 	font-size: 30px;
-	color: #37486C;
-	margin-left: -130px;
+	/* color: #37486C; */
+	color: #7FAFBF;
+	margin-left: -135px;
 	font-weight: bold;
 }
 
@@ -219,7 +220,7 @@ header {
 }
 
 #map {
-    height: 400px;
+    height: 500px;
     width: 100%;
 		border-top: 1px solid #000000;
 		border-bottom: 1px solid #000000;
@@ -249,7 +250,6 @@ header {
 .cookiebuttons {
 	display: flex;
 	flex-direction: row;
-	margin: 15px 0px 10px 0px;
 }
 
 .btnlink a {
