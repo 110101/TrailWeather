@@ -30,4 +30,16 @@ def result(request):
     # input_result = get_object_or_404(pk=input_lat_lon)
     # input_lat_lon = request.POST.get('input', False)
 
+# trainer view
+def trainer(request):
+    # loading the django template
+    template = loader.get_template('trailcondition/trainer.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
+# trainer view
+def about(request):
+    # loading the django template
+    template = loader.get_template('trailcondition/about.html')
+    context = {}
+    return HttpResponse(template.render(context, request))

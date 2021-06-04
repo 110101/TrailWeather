@@ -12,21 +12,27 @@ function onMoveStart(e){
 };
 
 function initmap(){
-	var tilelayer = new L.StamenTileLayer("terrain");
-	tilelayer.options.maxZoom = 18;
-	tilelayer.options.minZoom = 4; //12
+	// var tilelayer = new L.StamenTileLayer("terrain");
+	//tilelayer.options.maxZoom = 18;
+	//tilelayer.options.minZoom = 4; //12
+
+
 
 	// map = new L.Map('map').setView([defaultlat, defaultlong], 12);
 	map = L.map('map', {center: [defaultlat, defaultlong], zoom: 13, scrollWheelZoom: false});
-	map.addLayer(tilelayer);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+	//map.addLayer(tilelayer);
 
 	// adding additional control button
 	var container = L.DomUtil.create('input');
   container.type="button";
 
-	map.on('click', onMapClick);
+	//map.on('click', onMapClick);
 
-	map.once('focus', function() { map.scrollWheelZoom.enable(); });
+    //    map.on('click', function() { map.scrollWheelZoom.enable(); });
 }
 
 function onMapClick(e) {
@@ -36,6 +42,8 @@ function onMapClick(e) {
     var end = clicklocation.indexOf(")");
     var lat = clicklocation.substring(start+1, comma)
     var lng = clicklocation.substring(comma+2, end)
+
+    map.scrollWheelZoom.enable();
 
     feedback_streettype = overpassapi(lat, lng)
 

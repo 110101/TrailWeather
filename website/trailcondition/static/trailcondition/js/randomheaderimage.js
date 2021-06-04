@@ -5,5 +5,5 @@ function getRandomImage(imgArray) {
   var num = Math.floor( Math.random() * imgArray.length );
   var img = imgArray[ num ];
   var img_url = base_url + img + "')";
-  document.getElementById('head').style.backgroundImage = img_url;
+  document.getElementById('container1:before').style.backgroundImage = img_url;
 }
