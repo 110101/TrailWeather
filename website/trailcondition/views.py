@@ -3,6 +3,7 @@ from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from algo import run_algo
+from algo import dojo
 
 # Create your views here.
 # index view
@@ -34,6 +35,22 @@ def result(request):
 def trainer(request):
     # loading the django template
     template = loader.get_template('trailcondition/trainer.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def trainerfinish(request):
+    # loading the django template
+    template = loader.get_template('trailcondition/trainerfinish.html')
+
+
+    # get form values
+    lat = str(request.POST.get('lat', None))
+    lon = str(request.POST.get('lon', None))
+    surface = str("tarmace")
+    condition = "condition"
+
+    dojo.writelogfile(lat, lon, surface, condition)
+
     context = {}
     return HttpResponse(template.render(context, request))
 

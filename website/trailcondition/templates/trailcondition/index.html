@@ -32,12 +32,12 @@
         <span class="result_text">Fetching Weather Data.</span>
       </div>
 </div>
-<div class="maincontainer">
-<div class="container1" id="postop">
+<div class="maincontainer media_scroll">
+<div class="container1 media_height1" id="postop">
     <div id="nav">
         <div class="navcontainer">
         <div class="logocontainer">
-                <div class="logo_img"></div>
+                <div class="logo_img media_vis"></div>
                 <div class="logo_center">
                     <a class="logo_text" href="{% url 'trailcondition:index' %}">TrailKondico</a>
                 </div>
@@ -52,64 +52,69 @@
             </div>
         </div>
     </div>
-    <div class="contentcontainer">
-    <div class="contentleft">
-
-                      <div class="text_center">
-        <p><span>Check if your next trail adventure will be dusty, muddy or something in between.
-          </span></p>
-      </div>
-    </div>
-    <div class="contentright">
-        <div class="boxhigh">
-              <div class="text_boxhigh">
-        <p><span>You are planning your next bike ride or hiking trip and want to know if you need to prepare for muddy trails, dust or perfect shredding conditions? Choose the location for your next tour and get a prediction based on historic weather data of the trail surface condition.
-          .</span></p>
-        </div>
-        <div class="button_boxhigh">
-          <a class="selectbutton" href="#posmap">Choose on Map</a>
-          <a id="gpxbutton" class="selectbutton_temp" title="coming soon">upload Tour (GPX)</a>
-        </div>
-        </div>
-        </div>
-    </div>
-        <footer>
-      <p>Copyright (c) 2018 Copyright Holder All Rights Reserved.</p>
-        <p>Crafted with love in Munich. Europe. Earth.</p>
-    </footer>
-</div>
-<div class="container2" id="posmap">
-    <div id="nav">
-        <div class="navcontainer">
-            <div class="locationinfocontainer">
-                <h3>Selected Location:</h3>
-
-            <div id="inputbox">
-
-            <form id="myform" name="myform" action="{% url 'trailcondition:result' %}" method="post">
-            {% csrf_token %}
-                <span>Lat:</span>
-                <input type="text" name="lat" id="lat">
-                <span>Lng:</span>
-                <input type="text" name="lon" id="lng">
-                <span>Surface:</span>
-                <input type="text" name="type" id="type">
-            </form>
-        </div>
+    <div class="contentcontainer c1">
+        <div class="innerwrappermain media_flex_colrow">
+            <div class="contentleft">
+                <div class="text_center media_text1_hl">
+                    <p><span>Check if your next trail adventure will be dusty, muddy or something in between.
+                  </span></p>
                 </div>
-            <div class="navitemcontainer">
-                <div class="navitem">
-                   <a href="#postop" id="exitmap" class="selectbutton">Back</a>
+            </div>
+            <div class="contentright">
+                <div class="boxhigh">
+                    <div class="text_boxhigh">
+                        <p><span>You are planning your next bike ride or hiking trip and want to know if you need to prepare for muddy trails, dust or perfect shredding conditions? Choose the location for your next tour and get a prediction based on historic weather data of the trail surface condition.
+                        .</span></p>
+                    </div>
+                    <div class="button_boxhigh media_flex_colrow">
+                        <a class="selectbutton media_width1" href="#posmap">Choose on Map</a>
+                        <a id="gpxbutton" class="selectbutton_temp media_width1" title="coming soon">upload Tour (GPX)</a>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
-    <div id="main">
+
+</div>
+<div class="container2 media_height1" id="posmap">
+    <div class="contentcontainer c2"> <!-- new -->
+        <div class="innerwrappermainmap">
+            <div class="innernavcontainer">
+                <div class="media_vis locationinfocontainer" id="lic">
+                <h3>Selected Location:</h3>
+
+                <div id="inputbox">
+
+                    <form id="myform" name="myform" action="{% url 'trailcondition:result' %}" method="post">
+                    {% csrf_token %}
+                        <input type="text" name="lat" id="lat">
+                        <input type="text" name="lon" id="lng">
+        <!--                <span></span>-->
+        <!--                <input type="text" name="type" id="type">-->
+                    </form>
+                </div>
+            </div>
+                <div class="button_center_result media_vis">
+                    <a id="exitmap" class="selectbutton" href="#postop">back</a>
+                </div>
+            </div>
+            <div class="innercontentcontainermain">
+                <div id="map"></div>
+                <div id="main"></div>
+            </div>
+                    <div class="footer">
+      <p>Copyright (c) 2018 Copyright Holder All Rights Reserved.</p>
+        <p>Crafted with love in Munich. Europe. Earth.</p>
+    </div>
+        </div>
+
+    </div>
  <!--   <div id="location">
           <a class="location-link" id="locateuser" title="current location"><img class="icon_arrow" src="/static/trailcondition/images/icon_arrow.png" width="15px" height="15px"></img></a>
         </div>-->
-        <div id="map"></div>
-    </div>
+
+
         <!--<div class="info">
           <div class="info_col1">
               <div class="col_content">
@@ -203,7 +208,7 @@
 
 
           // locate user
-          document.getElementById("location").onclick = function () { locate_user(); };
+          //document.getElementById("location").onclick = function () { locate_user(); };
 
         	function submitform() {
 
@@ -315,9 +320,9 @@
   }
 
   // random header images
-  getRandomImage(headerimgarray);
+  // getRandomImage(headerimgarray);
 
-  unsplash();
+  // unsplash();
 
 
 </script>

@@ -26,12 +26,12 @@
 </div>
 <div class="maincontainer">
 <div class="container1" id="postop">
-    <nav>
+    <div id="nav">
         <div class="navcontainer">
         <div class="logocontainer">
                 <div class="logo_img"></div>
                 <div class="logo_center">
-                    <span class="logo_text">TrailKondico</span>
+                    <a class="logo_text" href="{% url 'trailcondition:index' %}">TrailKondico</a>
                 </div>
         </div>
             <div class="navitemcontainer">
@@ -43,25 +43,49 @@
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
     <div class="contentcontainer">
-    <div class="contentleft">
+        <div class="box3">
+            <div class="trainerbox">
+                <a class="selectbuttontrainer" onclick="userlocation()" href="#">Get Current Location</a>
+            </div>
+            <div class="trainerbox">
+                <div id="trainermap"></div>
+            </div>
+            <div class="trainerbox">
+                <form id="trainerform" name="trainerform" action="{% url 'trailcondition:trainerfinish' %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" id="lat" name="lat">
+                    <input type="text" id="lng" name="lng">
 
-                      <div class="text_center">
-        <p><span>Check if your next trail adventure will be dusty, muddy or something in between.
-          </span></p>
-      </div>
-    </div>
-    <div class="contentright">
-        <div class="boxhigh">
-              <div class="text_boxhigh">
-        <p><span>You are planning your next bike ride or hiking trip and want to know if you need to prepare for muddy trails, dust or perfect shredding conditions? Choose the location for your next tour and get a prediction based on historic weather data of the trail surface condition.
-          .</span></p>
-        </div>
+                    <label for="surface">Choose surface type:</label>
+                    <select id="surface" name="surface" class="trainerdropdown">
+                      <option value="volvo">Tarmac</option>
+                      <option value="saab">Light Gravel</option>
+                      <option value="fiat">Gravel</option>
+                      <option value="audi">Trail</option>
+                        <option value="audi">Trail - loose</option>
+                        <option value="audi">Trail - hardpack</option>
+                    </select>
 
+                    <label for="condition">Choose surface type:</label>
+                    <select id="condition" name="condition" class="trainerdropdown">
+                      <option value="volvo">dry</option>
+                      <option value="saab">partly wet</option>
+                      <option value="fiat">wet</option>
+                    </select>
+                </form>
+
+            </div>
+        <div class="trainerbox">
+            <p>Drop Down Surface Condition:</p>
+        </div>
+        <div class="trainerbox">
+            <a class="selectbuttontrainer" rel="import" href="javascript: submitform()">Submit</a>
         </div>
         </div>
     </div>
+
 <!--      <div id="cover"></div>-->
 
 </div>
@@ -73,89 +97,78 @@
     </footer>
     </div>
 </body>
-<script type="text/javascript" src="{% static 'trailcondition/leaflet/leaflet.js' %}"></script>
 <script type="text/javascript" src="{% static 'trailcondition/js/jquery-3.3.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'trailcondition/js/jquery-ui.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'trailcondition/js/stamen.js' %}"></script>
-<script type="text/javascript" src="{% static 'trailcondition/js/leafletembedded.js' %}"></script>
-<script type="text/javascript" src="{% static 'trailcondition/js/randomheaderimage.js' %}"></script>
+<script type="text/javascript" src="{% static 'trailcondition/leaflet/leaflet.js' %}"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-150914856-1"></script>
 <script type="text/javascript">
-        	function initial() {
-                // let myElement = document.querySelector("#spinner");
-                //    myElement.style.opacity = 0;
-                //    myElement.style.visibility = "hidden";
 
-                var myElement = document.getElementById("spinner");
-                myElement.classList.remove("spinner_loading");
-                myElement.classList.add("spinner_hidden");
-            }
+      var map;
+      var defaultlat = 48.6534;
+        var defaultlong = 11.212;
 
-          function unsplash() {
-            var filename_raw = $('cover').css('background-image');
-            var filename_split = filename_raw.split('/');
-            var filename = filename_split[filename_split.length - 1];
-            var authorname = filename.split('-');
-            var given_name = authorname[0];
-            var name = authorname[1];
-            var username_raw = authorname[2].split('.');
-            var username = username_raw[0];
-
-            document.getElementById('unsplash_link').innerHTML += '' + given_name + ' ' + name;
-            document.getElementById('unsplash_link').href = 'https://www.unsplash.com/' + username;
-          }
+  function initmap(defaultlat, defaultlong){
 
 
-          $("#exitmap").click(function() {
-            map.scrollWheelZoom.disable();
-            document.getElementById("mapbackbutton").style.visibility = "hidden";
-            map.closePopup();
-                $('html, body').animate({
-                    scrollTop: $("#postop").offset().top
-            }, 500);
-          });
 
-          initmap();
+	map = L.map('trainermap', {center: [defaultlat, defaultlong], zoom: 13, zoomControl: false});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+        map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
 
+
+
+
+  }
+            initmap(defaultlat, defaultlong);
           onInit();
 
-          initial();
 
-
-          // activate scroll with mouse wheel on click on map
-        	map.on('click', onMapClick);
 
 
           // locate user
-          document.getElementById("location").onclick = function () { locate_user(); };
+          // document.getElementById("location").onclick = function () { locate_user(); };
+
+          function userlocation() {
+                function success(position) {
+                         const latitude  = position.coords.latitude;
+                         const longitude = position.coords.longitude;
+
+                         document.getElementById("lat").value = Number(( parseFloat(latitude) ).toFixed(4));
+                        document.getElementById("lng").value = Number(( parseFloat(longitude) ).toFixed(4));
+
+                        map.setView(new L.LatLng(latitude, longitude), 14);
+                        L.marker([latitude, longitude]).addTo(map);
+
+                    alert(latitude);
+                };
+
+                function error(){
+
+                };
+
+                var options = {
+                  enableHighAccuracy: true,
+                  timeout: 5000,
+                  maximumAge: 100
+                };
+
+                //var usrloc = locate_user();
+                navigator.geolocation.getCurrentPosition(success, error, options);
+
+          };
+
 
         	function submitform() {
-
-                var myElement = document.getElementById("spinner");
-                if (myElement.classList.contains('spinner_hidden') == true) {
-                myElement.classList.remove("spinner_hidden");
-                myElement.classList.add("spinner_loading");
-                } else {
-                myElement.classList.remove("spinner_loading");
-                myElement.classList.add("spinner_hidden");
-                }
-
-        	    // var myElement = document.querySelector(".spinner_hidden");
-                // myElement.style.opacity = 1;
-                // myElement.style.visibility = "visible";
-
-
-
-                document.myform.submit();
+                alert("hi");
+                document.trainerform.submit();
 
             }
 
-            $("#mapbutton").click(function() {
-                $('html, body').animate({
-                    scrollTop: $("#posmap").offset().top
-            }, 500);
-
-            });
 
   // check/set ga cookie
   function checkforcookie(name) {
@@ -241,11 +254,6 @@
       dislikecookies();
     }
   }
-
-  // random header images
-  getRandomImage(headerimgarray);
-
-  unsplash();
 
 
 </script>
