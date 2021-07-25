@@ -38,7 +38,7 @@ def hoursindays(duration):
     return days, hours
 
 
-def run(dataset, lat, lon):
+def run(dataset, lat, lon, stype):
     # data set consists out of six rows timestamp: 'dt'; temperature: 'temp'; humidity: 'humidity; dew point:
     # 'dew_point'; wind: 'wind'; weather id: 'weather_id'
 
@@ -188,7 +188,7 @@ def run(dataset, lat, lon):
             'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration),
             'lastrain_intensity_mm': str(lastrain_intensity), 'rain_commulated_l5days_mm': str(rain_commulated_l5days),
             'cos_road': cos['road'], 'cos_gravel': cos['gravel'], 'cos_trail': cos['trail'],
-            'lat': str(lat), 'lon': str(lon)}
+            'lat': str(lat), 'lon': str(lon), 'stype': stype}
 
 
 def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_intensity, amount_of_rain, avrg_temp, avrg_wind, avrg_hum):
@@ -278,7 +278,7 @@ def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_
     return cos
 
 
-def get_weather_data(lat, lon):
+def get_weather_data(lat, lon, stype):
     # dem lat long city
     # lat = str(48.12152)
     # lon = str(11.54549)
@@ -299,7 +299,7 @@ def get_weather_data(lat, lon):
     #                                                   'rain_mm'])
 
     # calc trail condition algo and calc condition of surface (cos)
-    condition_feedback = run(owm_hist_dataset_return, lat, lon)
+    condition_feedback = run(owm_hist_dataset_return, lat, lon, stype)
     print(condition_feedback)
 
     return condition_feedback

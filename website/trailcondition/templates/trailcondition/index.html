@@ -83,15 +83,14 @@
             <div class="innernavcontainer">
                 <div class="media_vis locationinfocontainer" id="lic">
                 <h3>Selected Location:</h3>
-
                 <div id="inputbox">
-
                     <form id="myform" name="myform" action="{% url 'trailcondition:result' %}" method="post">
                     {% csrf_token %}
                         <input type="text" name="lat" id="lat">
                         <input type="text" name="lon" id="lng">
-        <!--                <span></span>-->
-        <!--                <input type="text" name="type" id="type">-->
+                        <div class="hiddenform">
+                        <input type="text" name="type" id="type">
+                            </div>
                     </form>
                 </div>
             </div>

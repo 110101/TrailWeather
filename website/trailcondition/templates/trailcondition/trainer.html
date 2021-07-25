@@ -7,7 +7,7 @@
 	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/css/jquery-ui.css' %}"/>
 	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/css/style.css' %}" />
 	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/leaflet/leaflet.css' %}"/>
-    <title>Trail Kondico</title>
+    <title>Trail Kondico - Trainer</title>
 </head>
 <body>
 <div id="cookiebanner">
@@ -25,7 +25,7 @@
   </div>
 </div>
 <div class="maincontainer">
-<div class="container1" id="postop">
+<div class="container1 media_height1" id="postop">
     <div id="nav">
         <div class="navcontainer">
         <div class="logocontainer">
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div class="contentcontainer">
+    <div class="contentcontainer page">
         <div class="box3">
             <div class="trainerbox">
                 <a class="selectbuttontrainer" onclick="userlocation()" href="#">Get Current Location</a>
@@ -55,27 +55,37 @@
             <div class="trainerbox">
                 <form id="trainerform" name="trainerform" action="{% url 'trailcondition:trainerfinish' %}" method="post">
                     {% csrf_token %}
+                    <label for="surface">Select surface type:</label>
+                    <select id="surface" name="surface" class="trainerdropdown">
+                        <option value="surface1">paved</option>
+                        <option value="surface2">asphalt</option>
+                        <option value="surface3">concrete</option>
+                        <option value="surface4">paving stones</option>
+                        <option value="surface5">cobblestones</option>
+                        <option value="surface6">metal</option>
+                        <option value="surface7">wood</option>
+                        <option value="surface8">unpaved</option>
+                        <option value="surface9">compacted</option>
+                        <option value="surface10">fine gravel</option>
+                        <option value="surface11">gravel</option>
+                        <option value="surface12">pebblestone</option>
+                        <option value="surface13">ground</option>
+                        <option value="surface14">dirt</option>
+                        <option value="surface15">sand</option>
+                        <option value="surface16">grass</option>
+                        <option value="surface17">woodchips</option>
+                    </select>
+                    <label for="condition">Select surface condition:</label>
+                    <select id="condition" name="condition" class="trainerdropdown">
+                        <option value="cond1">dry</option>
+                        <option value="cond2">partly dry/wet (e.g puddles)</option>
+                        <option value="cond3">wet surface</option>
+                        <option value="cond4">wet </option>
+                        <option value="cond5">muddy</option>
+                    </select>
                     <input type="text" id="lat" name="lat">
                     <input type="text" id="lng" name="lng">
-
-                    <label for="surface">Choose surface type:</label>
-                    <select id="surface" name="surface" class="trainerdropdown">
-                      <option value="volvo">Tarmac</option>
-                      <option value="saab">Light Gravel</option>
-                      <option value="fiat">Gravel</option>
-                      <option value="audi">Trail</option>
-                        <option value="audi">Trail - loose</option>
-                        <option value="audi">Trail - hardpack</option>
-                    </select>
-
-                    <label for="condition">Choose surface type:</label>
-                    <select id="condition" name="condition" class="trainerdropdown">
-                      <option value="volvo">dry</option>
-                      <option value="saab">partly wet</option>
-                      <option value="fiat">wet</option>
-                    </select>
                 </form>
-
             </div>
         <div class="trainerbox">
             <p>Drop Down Surface Condition:</p>
@@ -85,16 +95,12 @@
         </div>
         </div>
     </div>
-
-<!--      <div id="cover"></div>-->
-
-</div>
-
-    <footer>
+    <div class="footer">
       <p>Copyright (c) 2018 Copyright Holder All Rights Reserved.</p>
         <p>Crafted with love in Munich. Europe. Earth.</p>
       <div class="footerbox"></div>
-    </footer>
+    </div>
+</div>
     </div>
 </body>
 <script type="text/javascript" src="{% static 'trailcondition/js/jquery-3.3.1.min.js' %}"></script>
@@ -105,24 +111,16 @@
 
       var map;
       var defaultlat = 48.6534;
-        var defaultlong = 11.212;
+      var defaultlong = 11.212;
 
   function initmap(defaultlat, defaultlong){
 
 
 
-	map = L.map('trainermap', {center: [defaultlat, defaultlong], zoom: 13, zoomControl: false});
+	map = L.map('trainermap', {center: [defaultlat, defaultlong], zoom: 13, zoomControl: true});
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
-        map.dragging.disable();
-    map.touchZoom.disable();
-    map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
-
-
-
-
   }
             initmap(defaultlat, defaultlong);
           onInit();

@@ -39,37 +39,42 @@ function overpassapi (lat, lng){
     var resulturl = baseurl + query;
     //alert(resulturl);
     var Road_name = "n/a"
-    var Surface_name = "n/a"
+    var Surface_name = "unknown"
     //  [out:json];way(id:104178011,18916837);out tags;
 
     $.get(resulturl, function (osmDataAsJson) {
         var NOMresultstring = JSON.stringify(osmDataAsJson);
-        alert(NOMresultstring);
+        //alert(NOMresultstring);
           // check if user picked a way
-       var check_if_id1 = NOMresultstring.includes("road");
+/*        var check_if_id1 = NOMresultstring.includes("road");
         if (check_if_id1 == true){
            // if way slected get OSM ID to get surface type in the end
             var Road_idstart = NOMresultstring.indexOf("road");  // + 2
             var Road_short = NOMresultstring.slice(Road_idstart);
             var Road_idend = Road_short.indexOf(",") - 1;
             Road_name = Road_short.substring(7, Road_idend);
-            alert("R:" + Road_name);
-        }
+            //alert("R:" + Road_name);
+        }*/
 
         var check_if_id2 = NOMresultstring.includes("surface");
         if (check_if_id2 == true){
            // if way slected get OSM ID to get surface type in the end
             var Surface_idstart = NOMresultstring.indexOf("surface");  // + 2
+
             var Surface_short = NOMresultstring.slice(Surface_idstart);
+
             var Surface_idend = Surface_short.indexOf(",") - 1;
             Surface_name = Surface_short.substring(10, Surface_idend);
+            // alert(Surface_name);
             if (Surface_name.includes(",") == true){
                 Surface_name = "unknown";
             }
- //           alert("S:" + Surface_name);
+            else if (Surface_name.includes("_") == true){
+                Surface_name = Surface_name.replace(/_/g, " ");
+            }
         }
     });
-    return Road_name;
+    return Surface_name;
 }
 
 function onMapClick(e) {
@@ -87,9 +92,9 @@ function onMapClick(e) {
         document.getElementById("lic").style.visibility = "visible";
         document.getElementById("lat").value = Number(( parseFloat(lat) ).toFixed(4));
         document.getElementById("lng").value = Number(( parseFloat(lng) ).toFixed(4));
-            //osm_data_return = overpassapi(lat, lng);
+        osm_data_return = overpassapi(lat, lng);
         //alert("return:" + osm_data_return);
-        //document.getElementById("type").value = osm_data_return.toString();
+        document.getElementById("type").value = osm_data_return.toString();
 
     var popup = L.popup({closeButton: false})
         .setLatLng(e.latlng)

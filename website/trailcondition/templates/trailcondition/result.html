@@ -7,7 +7,7 @@
 	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/css/jquery-ui.css' %}"/>
 	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/css/style.css' %}" />
 	  <link rel="stylesheet" type="text/css" href="{% static 'trailcondition/leaflet/leaflet.css' %}"/>
-    <title>Result: {{ lat }}, {{ lng }} - Trial Kondico</title>
+    <title>Trial Kondico - Result</title>
 </head>
 <body>
   <div id="cookiebanner">
@@ -29,7 +29,7 @@
         <div id="nav">
             <div class="navcontainer">
             <div class="logocontainer">
-                    <div class="logo_img"></div>
+                    <div class="logo_img media_vis"></div>
                     <div class="logo_center">
                         <a class="logo_text" href="{% url 'trailcondition:index' %}">TrailKondico</a>
                     </div>
@@ -67,6 +67,9 @@
                             <span><h4>Selected Location:</h4>{{ lat }}, {{ lng }}</span>
                         </div>
                         <div class="box3">
+                            <span><h4>Selected Surface:</h4>{{ stype }}</span>
+                        </div>
+                        <div class="box4">
                             <h4>Probable Condition of Surface</h4>
                             <div class="result_surface_box">
                                 <div class="minibox">
@@ -86,12 +89,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="box4">
-                            <span>Data</span>
-                        </div>
                         {% if rain_status == "1" %}
                         <div class="box3">
-                            <div class="resultbox">
+                            <div class="resultbox media_flex_colrow">
                                 <div class="minibox">
                                     <h5>Time since last rain:</h5>
                                     <span class="result_text">{{ time_since_rain_days }} days, {{ time_since_rain_hours }} hours</span>
@@ -127,17 +127,19 @@
                             </div>
                         </div>
                         {% elif rain_status == "0" %}
+                        <div class="resultbox media_flex_colrow">
                                 <div class="minibox">
                             <!-- <img class="large_icon" src="/static/trailcondition/images/icon_sun_large.png"></img> -->
                             <h4>There was no rain in the past five days.</h4>
                             <span class="result_text">Enjoy the great outdoors.</span>
 
                         </div>
+                            </div>
                         {% else %}
-
-                                <div class="minibox">
-                            <span class="result_text">Ups, something went wrong. Please try again</span>
-
+                        <div class="resultbox media_flex_colrow">
+                            <div class="minibox">
+                                <span class="result_text">Ups, something went wrong. Please try again</span>
+                            </div>
                         </div>
                         {% endif %}
                             </div>
