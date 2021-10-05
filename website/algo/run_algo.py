@@ -4,41 +4,8 @@ import pandas
 from datetime import datetime
 
 
-def test(lat, lng):
-    rain_status = 1
-    time_since_rain_days = 3
-    time_since_rain_hours = 0
-    lastrain_duration = 1
-    lastrain_intensity = 0.5
-    rain_commulated_l5days = 5
-    temp_avrg_l5days = 10
-    wind_avrg_l5days = 0
-    hum_avrg_l5days = 55
-    cors_road = "dry"
-    cors_gravel = "dry"
-    cors_trail = "dry"
-
-    cos_feedback = calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_intensity,
-                            rain_commulated_l5days, temp_avrg_l5days, wind_avrg_l5days, hum_avrg_l5days)
-
-    return {'rain_status': str(rain_status), 'time_since_rain_days': str(time_since_rain_days),
-            'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration),
-            'lastrain_intensity_mm': str(lastrain_intensity), 'rain_commulated_l5days_mm': str(rain_commulated_l5days),
-            'cos_road': cos_feedback["road"], 'cos_gravel': cos_feedback["gravel"],
-            'cos_trail': cos_feedback["trail"], 'lat': str(lat), 'lng': str(lng)}
-
-# abbriviations
-# ts - timestamp
-
-# duration in minutes converted in to days, hours
-def hoursindays(duration):
-    days = int(duration / 24)
-    hours = int(duration - (24*days))
-
-    return days, hours
-
-
-def run(dataset, lat, lon, stype):
+# main algo
+def run_base_algo(dataset, lat, lon, stype):
     # data set consists out of six rows timestamp: 'dt'; temperature: 'temp'; humidity: 'humidity; dew point:
     # 'dew_point'; wind: 'wind'; weather id: 'weather_id'
 
@@ -46,28 +13,44 @@ def run(dataset, lat, lon, stype):
     newest = dataset.tail(1)
 
     # find all time stamps with rain
-    rain = dataset.query('(weather_id >= 200) & (weather_id < 700) & (rain_mm > 0.2)')
+    # initial filter by weather id and rain_mm
+    rain = dataset.query('(weather_id >= 200) & (weather_id < 700) & (rain_mm > 0.1)')
     print(rain)
 
     # information on all "rains"
     # ---
+    # rain in the last 5 days in the data set
     if not rain.empty:
         # last rain / last row
         lastrain_row = rain.tail(1)
+        print(lastrain_row)
 
-        # short cut if last rain is really long ago
-        # time since really last rain
+        # -- time since really last rain
         # reference point "now" or timestamp of following rain
         ref_timestamp = int(datetime.now(tz=None).timestamp())
 
+        # time since last rain
         ts_lastrain = (int(newest['dt']) - int(lastrain_row['dt']))
+        print(ts_lastrain)
 
+        # -- history of last 5 days:
+        # -- average values
+        # amount of rain last 5 days
         rain_commulated_l5days = round(rain['rain_mm'].sum(),1)
+        print(rain_commulated_l5days)
+
+        # average temp (last 5 days)
         temp_avrg_l5days = rain['temp'].mean()
+        print(temp_avrg_l5days)
+
+        # average humidity (last 5 days)
         hum_avrg_l5days = rain['humidity'].mean()
+
+        # average wind
         wind_avrg_l5days = rain['wind'].mean()
 
-        # if last rain is below threshold do the math
+        # -- detailed data for the latest rain
+        # -- processed only if last rain is not now
         if ts_lastrain != 0:
             # status bit: there was rain in the past 5 days
             rain_status = 1
@@ -87,8 +70,8 @@ def run(dataset, lat, lon, stype):
             # -1 because of 1 hour blocks in the data set
             time_since_rain = ((ref_timestamp - rain_end_ts) / 3600) - 1
             time_since_rain = hoursindays(time_since_rain)
-            time_since_rain_days = time_since_rain[0]
-            time_since_rain_hours = time_since_rain[1]
+            time_since_rain_days = round(time_since_rain[0], 1)
+            time_since_rain_hours = round(time_since_rain[1], 1)
 
             # temp since rain
             temp_since_rain = dataset.query('dt <= @ref_timestamp and dt >= @rain_end_ts')['temp'].mean()
@@ -117,8 +100,8 @@ def run(dataset, lat, lon, stype):
                         # rain object
                         rain_data = rain_data.append(
                             {'dt_start': rain_end_ts, 'dt_end': rain.iloc[row]['dt'],
-                             'weather_id': rain.iloc[row]['weather_id'], 'rain_duration': rain_duration,
-                             'rain_intnsty': rain_intensity}, ignore_index=True)
+                             'weather_id': rain.iloc[row]['weather_id'], 'rain_duration': round(rain_duration, 1),
+                             'rain_intnsty': round(rain_intensity, 1)}, ignore_index=True)
 
                         # update rain_end with next "rain block" from data set and reference timestamp
                         rain_end_ts = rain.iloc[row-1]['dt']
@@ -137,8 +120,8 @@ def run(dataset, lat, lon, stype):
                         # rain object
                         rain_data = rain_data.append(
                             {'dt_start': rain_end_ts, 'dt_end': rain.iloc[row]['dt'],
-                             'weather_id': rain.iloc[row]['weather_id'], 'rain_duration': rain_duration,
-                             'rain_intnsty': rain_intensity}, ignore_index=True)
+                             'weather_id': rain.iloc[row]['weather_id'], 'rain_duration': round(rain_duration, 1),
+                             'rain_intnsty': round(rain_intensity, 1)}, ignore_index=True)
 
                         # update rain_end with next "rain block" from data set and reference timestamp
                         rain_end_ts = rain.iloc[row-1]['dt']
@@ -149,8 +132,8 @@ def run(dataset, lat, lon, stype):
                 # rain object
                 rain_data = rain_data.append(
                     {'dt_start': rain_end_ts, 'dt_end': rain_end_ts,
-                     'weather_id': rain.query('dt == @rain_end_ts')['weather_id'], 'rain_duration': rain_duration,
-                     'rain_intnsty': rain_intensity}, ignore_index=True)
+                     'weather_id': rain.query('dt == @rain_end_ts')['weather_id'], 'rain_duration': round(rain_duration, 1),
+                     'rain_intnsty': round(rain_intensity, 1)}, ignore_index=True)
 
             # duration of last rain - MVP - only consider last rain and its duration
             if not rain_data.empty:
@@ -170,7 +153,7 @@ def run(dataset, lat, lon, stype):
             hum_avrg_l5days = 0
 
     else:
-        # no rain
+        # no rain in the past 5 days
         rain_status = 0  # no rain > 0
         rain_commulated_l5days = 0
         time_since_rain_days = 99  # not relevant > 99
@@ -192,7 +175,6 @@ def run(dataset, lat, lon, stype):
 
 
 def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_intensity, amount_of_rain, avrg_temp, avrg_wind, avrg_hum):
-
     # init of needed dicts and parameters
     diff_dry_time_dict = {}
     cos = {}
@@ -242,7 +224,7 @@ def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_
     f_sum =  [f_sum_road, f_sum_gravel, f_sum_trail]
 
     # time since last rain in hours
-    time_since_rain = (time_since_rain_days * 24) + time_since_rain_hours
+    time_since_rain = round((time_since_rain_days * 24), 1) + time_since_rain_hours
 
     # diff between dry time and time since last rain
     for f in f_sum:
@@ -278,18 +260,22 @@ def calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_
     return cos
 
 
-def get_weather_data(lat, lon, stype):
-    # dem lat long city
-    # lat = str(48.12152)
-    # lon = str(11.54549)
-
-    # demo lat long isar trails
-    # lat = str(48.07)
-    # lon = str(11.54)
+# main start point from website
+# lat, lon, stype received from website
+def mainloop (lat, lon, stype):
 
     # get current timestamp in UNIX
     timestamp = owm_api.time_now_UNIX()
 
+    weather_data_owm = get_owm_data(lat, lon, timestamp)
+
+    # calc condition of trail surface (cos)
+    surface_condition = run_base_algo(weather_data_owm, lat, lon, stype)
+
+    return surface_condition
+
+
+def get_owm_data(lat, lon, timestamp):
     # get hist data from owm
     owm_hist_dataset_return = owm_api.owm_hist_data(timestamp, lat, lon)
 
@@ -297,17 +283,53 @@ def get_weather_data(lat, lon, stype):
     # owm_hist_dataset_return = pandas.read_csv("ref_data/synth_test_one_rain.csv",
     #                                          usecols=['dt', 'temp', 'humidity', 'dew_point', 'wind', 'weather_id',
     #                                                   'rain_mm'])
+    return owm_hist_dataset_return
 
-    # calc trail condition algo and calc condition of surface (cos)
-    condition_feedback = run(owm_hist_dataset_return, lat, lon, stype)
-    print(condition_feedback)
 
-    return condition_feedback
+# duration in minutes converted in to days, hours
+def hoursindays(duration):
+    days = duration / 24
+    hours = duration - (24*days)
+
+    return days, hours
+
+
+
+# Tests
 
 
 # just for testing
-lat = str(48.07)
-lon = str(11.54)
+# lat = str(48.07)
+# lon = str(11.54)
 
-# feedb = test(lat, lon)
-# print(feedb)
+    # demo lat long isar trails
+    # lat = str(48.07)
+    # lon = str(11.54)
+
+
+# remove after testing
+def test(lat, lng):
+    rain_status = 1
+    time_since_rain_days = 3
+    time_since_rain_hours = 0
+    lastrain_duration = 1
+    lastrain_intensity = 0.5
+    rain_commulated_l5days = 5
+    temp_avrg_l5days = 10
+    wind_avrg_l5days = 0
+    hum_avrg_l5days = 55
+    cors_road = "dry"
+    cors_gravel = "dry"
+    cors_trail = "dry"
+
+    cos_feedback = calc_cos(rain_status, time_since_rain_days, time_since_rain_hours, lastrain_intensity,
+                            rain_commulated_l5days, temp_avrg_l5days, wind_avrg_l5days, hum_avrg_l5days)
+
+    return {'rain_status': str(rain_status), 'time_since_rain_days': str(time_since_rain_days),
+            'time_since_rain_hours': str(time_since_rain_hours), 'lastrain_duration_h': str(lastrain_duration),
+            'lastrain_intensity_mm': str(lastrain_intensity), 'rain_commulated_l5days_mm': str(rain_commulated_l5days),
+            'cos_road': cos_feedback["road"], 'cos_gravel': cos_feedback["gravel"],
+            'cos_trail': cos_feedback["trail"], 'lat': str(lat), 'lng': str(lng)}
+
+# abbriviations
+# ts - timestamp

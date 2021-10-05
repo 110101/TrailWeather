@@ -24,7 +24,7 @@ def result(request):
 
     # get weather data and calc results
     #result = run_algo.test(lat, lon)  # for testing
-    result = run_algo.get_weather_data(lat, lon, stype)
+    result = run_algo.mainloop(lat, lon, stype)
 
     # pass to display results on website
     html = {"time_since_rain_days": result["time_since_rain_days"], "time_since_rain_hours": result["time_since_rain_hours"], "lastrain_duration_h": result["lastrain_duration_h"], "rain_status": result["rain_status"], "lastrain_intensity_mm": result["lastrain_intensity_mm"], "rain_commulated_l5days_mm": result["rain_commulated_l5days_mm"], "cos_road": result["cos_road"], "cos_gravel": result["cos_gravel"], "cos_trail": result["cos_trail"], "lat": result["lat"], "lng": result["lon"], "stype": result["stype"]}
@@ -46,9 +46,10 @@ def trainerfinish(request):
 
     # get form values
     lat = str(request.POST.get('lat', None))
-    lon = str(request.POST.get('lon', None))
-    surface = str("tarmace")
-    condition = "condition"
+    lon = str(request.POST.get('lng', None))
+    surface = str(request.POST.get('surface', None))
+    condition = str(request.POST.get('condition', None))
+
 
     dojo.writelogfile(lat, lon, surface, condition)
 

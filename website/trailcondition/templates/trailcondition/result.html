@@ -109,14 +109,13 @@
                                 {% endif %}-->
                                 <div class="minibox">
                                     <h5>Intensity of last rain:</h5>
-                                    <span class="result_text">{{ lastrain_intensity_mm }} mm/m</span>
+                                    <span class="result_text">{{ lastrain_intensity_mm }} l/m^2</span>
                                 </div>
 
                                 <div class="minibox">
                                     <!-- <img class="large_icon" src="/static/trailcondition/images/icon_rain_large.png"></img> -->
-                                    <h5> Amount of rain:</h5>
-                                    <span>(last 5 days)</span>
-                                    <span class="result_text">{{ rain_commulated_l5days_mm }} mm/m</span>
+                                    <h5> Amount of rain (last five days):</h5>
+                                    <span class="result_text">{{ rain_commulated_l5days_mm }} l/m^2</span>
                                 </div>
                                 {% elif rain_status == "50" %}
                                 <div class="minibox">
