@@ -32,14 +32,13 @@
         <span class="result_text">Fetching Weather Data.</span>
       </div>
 </div>
-<div class="maincontainer media_scroll">
-<div class="container1 media_height1" id="postop">
-    <div id="nav">
+<div class="container1" id="postop">
+    <nav>
         <div class="navcontainer">
         <div class="logocontainer">
-                <div class="logo_img media_vis"></div>
+                <div class="logo_img"></div>
                 <div class="logo_center">
-                    <a class="logo_text" href="{% url 'trailcondition:index' %}">TrailKondico</a>
+                    <span class="logo_text">TrailKondico</span>
                 </div>
         </div>
             <div class="navitemcontainer">
@@ -51,72 +50,50 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="contentcontainer c1">
-        <div class="innerwrappermain media_flex_colrow">
-            <div class="contentleft" id="backimage">
-                <div class="text_center media_text1_hl">
-                    <p><span>Check if your next trail adventure will be dusty, muddy or something in between.
-                  </span></p>
-                </div>
-            </div>
-            <div class="contentright">
-                <div class="boxhigh">
-                    <div class="text_boxhigh">
-                        <p><span>You are planning your next bike ride or hiking trip and want to know if you need to prepare for muddy trails, dust or perfect shredding conditions? Choose the location for your next tour and get a prediction based on historic weather data of the trail surface condition.
-                        .</span></p>
-                    </div>
-                    <div class="button_boxhigh media_flex_colrow">
-                        <a class="selectbutton media_width1" href="#posmap">Choose on Map</a>
-                        <a id="gpxbutton" class="selectbutton_temp media_width1" title="coming soon">upload Tour (GPX)</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </nav>
+    <div class="contentcontainer">
+    <div class="contentleft">
 
+                      <div class="text_center">
+        <p><span>Check if your next trail adventure will be dusty, muddy or something in between.
+          </span></p>
+      </div>
     </div>
+    <div class="contentright">
+        <div class="boxhigh">
+              <div class="text_boxhigh">
+        <p><span>You are planning your next bike ride or hiking trip and want to know if you need to prepare for muddy trails, dust or perfect shredding conditions? Choose the location for your next tour and get a prediction based on historic weather data of the trail surface condition.
+          .</span></p>
+        </div>
+        <div class="button_boxhigh">
+          <a id="mapbutton" class="selectbutton" href="#">Choose on Map</a>
+          <a id="gpxbutton" class="selectbutton_temp" title="coming soon">upload Tour (GPX)</a>
+        </div>
+        </div>
+        </div>
+    </div>
+<!--      <div id="cover"></div>-->
 
 </div>
-<div class="container2 media_height1" id="posmap">
-    <div class="contentcontainer c2"> <!-- new -->
-        <div class="innerwrappermainmap">
-            <div class="innernavcontainer">
-                <div class="media_vis locationinfocontainer" id="lic">
-                <h3>Selected Location:</h3>
-                <div id="inputbox">
-                    <form id="myform" name="myform" action="{% url 'trailcondition:result' %}" method="post">
-                    {% csrf_token %}
-                        <input type="text" name="lat" id="lat">
-                        <input type="text" name="lon" id="lng">
-                        <div class="hiddenform">
-                        <input type="text" name="type" id="type">
-                            </div>
-                    </form>
-                </div>
-            </div>
-                <div class="button_center_result media_vis">
-                    <a id="exitmap" class="selectbutton" href="#postop">back</a>
-                </div>
-            </div>
-            <div class="innercontentcontainermain">
-
-                <div id="map">
-                                    <div id="location">
-                    <a class="location-link" id="locateuser" title="current location"><img class="icon_arrow" src="/static/trailcondition/images/icon_arrow.png" width="15px" height="15px"></img></a>
-                </div>
-                </div>
-                <div id="main"></div>
-            </div>
-                    <div class="footer">
-      <p>Copyright (c) 2018 Copyright Holder All Rights Reserved.</p>
-        <p>Crafted with love in Munich. Europe. Earth.</p>
-    </div>
+<div class="container2" id="posmap">
+    <nav>
+        <div id="inputbox">
+            <form id="myform" name="myform" action="{% url 'trailcondition:result' %}" method="post">
+            {% csrf_token %}
+                <input type="text" name="lat" id="lat">
+                <input type="text" name="lon" id="lng">
+            </form>
         </div>
-
+        <div id="mapbackbutton">
+            <a id="exitmap" class="selectbutton"  href="#">back</a>
+        </div>
+    </nav>
+    <div id="main">
+        <div id="location">
+          <a class="location-link" id="locateuser" title="current location"><img class="icon_arrow" src="/static/trailcondition/images/icon_arrow.png" width="15px" height="15px"></img></a>
+        </div>
+        <div id="map"></div>
     </div>
-
-
-
         <!--<div class="info">
           <div class="info_col1">
               <div class="col_content">
@@ -157,8 +134,12 @@
         </div>
     </div>
   </div>-->
-</div>
-</div>
+
+    <footer>
+      <p>Copyright (c) 2018 Copyright Holder All Rights Reserved.</p>
+        <p>Crafted with love in Munich. Europe. Earth.</p>
+      <div class="footerbox"></div>
+    </footer>
 </body>
 <script type="text/javascript" src="{% static 'trailcondition/leaflet/leaflet.js' %}"></script>
 <script type="text/javascript" src="{% static 'trailcondition/js/jquery-3.3.1.min.js' %}"></script>
@@ -195,7 +176,11 @@
 
           $("#exitmap").click(function() {
             map.scrollWheelZoom.disable();
+            document.getElementById("mapbackbutton").style.visibility = "hidden";
             map.closePopup();
+                $('html, body').animate({
+                    scrollTop: $("#postop").offset().top
+            }, 500);
           });
 
           initmap();
@@ -210,7 +195,7 @@
 
 
           // locate user
-          //document.getElementById("location").onclick = function () { locate_user(); };
+          document.getElementById("location").onclick = function () { locate_user(); };
 
         	function submitform() {
 
@@ -233,8 +218,12 @@
 
             }
 
+            $("#mapbutton").click(function() {
+                $('html, body').animate({
+                    scrollTop: $("#posmap").offset().top
+            }, 500);
 
-
+            });
 
   // check/set ga cookie
   function checkforcookie(name) {
@@ -324,7 +313,7 @@
   // random header images
   getRandomImage(headerimgarray);
 
-  // unsplash();
+  unsplash();
 
 
 </script>

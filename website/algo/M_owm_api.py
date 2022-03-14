@@ -1,5 +1,4 @@
 import requests
-# from algo
 from algo import M_apikey
 import pandas
 from datetime import datetime
@@ -9,7 +8,7 @@ def owm_hist_data(time, lat, lon):
     ts_owm_api_start = datetime.now()
 
     # assemble api url
-    api_key= "54f724090313801f7966324601cccdfc"
+    api_key= M_apikey.getkey();
     api_base = "https://api.openweathermap.org/data/2.5/onecall/"
 
     # api time limitations
