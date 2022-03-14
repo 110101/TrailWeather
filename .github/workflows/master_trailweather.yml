@@ -4,6 +4,9 @@
 
 name: Build and deploy Python app to Azure Web App - trailweather
 
+env:
+  DJANGO_SECRET = ${{secrets.SECRET_KEY_DJANGO}}
+
 on:
   push:
     branches:
