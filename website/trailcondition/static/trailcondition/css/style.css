@@ -405,6 +405,7 @@ a:hover {
     height: 50px;
     width: 50px;
     margin-right: 10px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 5px;
 }
 
 .logo_center {

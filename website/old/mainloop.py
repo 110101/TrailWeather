@@ -20,7 +20,7 @@ print(timestamp)
 # owm_hist_dataset_return.to_csv("ref_test_data_city_but_200622.csv")
 
 # read in test data
-owm_hist_dataset_return = pandas.read_csv("ref_data/synth_test_one_rain.csv",
+owm_hist_dataset_return = pandas.read_csv("../algo/ref_data/synth_test_one_rain.csv",
                                           usecols=['dt', 'temp', 'humidity', 'dew_point', 'wind', 'weather_id',
                                                    'rain_mm'])
 
@@ -28,7 +28,7 @@ owm_hist_dataset_return = pandas.read_csv("ref_data/synth_test_one_rain.csv",
 # owm_forecast_dataset_return = owm_api.owm_forecast_data(timestamp, lat, lon)
 
 # algo
-condition_prob = algo.run(owm_hist_dataset_return)
+condition_prob = algo.run_base_algo_detailed(owm_hist_dataset_return)
 
 # cluster slgo return
 iteration = 0

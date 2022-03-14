@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/df2e4762-b876-400d-9188-a2823abdbe74/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/trailweather",
+    "appService.deploySubpath": "."
+}
