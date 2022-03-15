@@ -1,5 +1,5 @@
-# from algo import M_owm_api as owm_api
-import M_owm_api as owm_api  # process_algo as process
+from algo import M_owm_api as owm_api
+# import M_owm_api as owm_api  # process_algo as process
 import pandas
 import os
 from datetime import datetime
@@ -438,7 +438,7 @@ def test():
     #                                                       'rain_mm'])
     # local:
     script_dir = os.getcwd()
-    filepath = "ref_data/synth_test_one_rain.csv"
+    filepath = "/algo/ref_data/synth_test_one_rain.csv"
     weather_data_owm = pandas.read_csv(os.path.normcase(os.path.join(script_dir, filepath)),
                                        usecols=['dt', 'temp', 'humidity', 'dew_point', 'wind', 'weather_id',
                                                 'rain_mm'])
@@ -448,8 +448,8 @@ def test():
 
     return surface_condition
 
-res = test()
-print("res:")
+# res = test()
+# print("res:")
 # print(res)
 
 # abbriviations
