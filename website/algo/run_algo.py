@@ -448,8 +448,8 @@ def test():
 
     return surface_condition
 
-res = test()
-print("res:")
+# res = test()
+# print("res:")
 # print(res)
 
 # abbriviations
