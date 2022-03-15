@@ -2,5 +2,5 @@
 /venv/
 /website/venv/
 /website/algo/M_apikey.py
-/website/website/settings_org.py
+/website/website/settings.py
 *.pyc

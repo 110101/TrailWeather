@@ -1,5 +1,5 @@
-# from algo import M_owm_api as owm_api
-import M_owm_api as owm_api  # process_algo as process
+from algo import M_owm_api as owm_api
+#import M_owm_api as owm_api  # process_algo as process
 import pandas
 import os
 from datetime import datetime
