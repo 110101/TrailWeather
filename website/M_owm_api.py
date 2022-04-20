@@ -1,5 +1,5 @@
 import requests
-from algo import M_apikey
+import M_apikey
 # import M_apikey
 import pandas
 from datetime import datetime

@@ -438,7 +438,7 @@ def test():
     #                                                       'rain_mm'])
     # local:
     script_dir = os.getcwd()
-    filepath = "ref_data/synth_test_one_rain.csv"
+    filepath = "website/ref_data/synth_test_one_rain.csv"
     weather_data_owm = pandas.read_csv(os.path.normcase(os.path.join(script_dir, filepath)),
                                        usecols=['dt', 'temp', 'humidity', 'dew_point', 'wind', 'weather_id',
                                                 'rain_mm'])
@@ -448,7 +448,7 @@ def test():
 
     return surface_condition
 
-# res = test()
+res = test()
 # print("res:")
 # print(res)
 

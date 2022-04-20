@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DJANGO_SECRET']
+SECRET_KEY = '2-s53nv%t05io0!ghb0o6o_f0v+1+5fa$d6mwwf$+o17m*h(it'
 
 # SECURITY WARNING: don't run_base_algo_detailed with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.122.89.103', 'localhost']
+ALLOWED_HOSTS = ['trailweather.azurewebsites.net', 'localhost']
 
 
 # Application definition
