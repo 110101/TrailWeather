@@ -23,7 +23,6 @@ def run_algo_smplfd(dataset, lat, lon, stype):
     hum_avrg_5days = dataset['humidity'].mean()
     print("Average Hum: " + str(hum_avrg_5days))
 
-
     # average wind
     wind_avrg_5days = dataset['wind'].mean()
     print("Average Wind: " + str(wind_avrg_5days))
