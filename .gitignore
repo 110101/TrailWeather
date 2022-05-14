@@ -1,6 +1,8 @@
 # Project exclude paths
 /website/algo/M_apikey.py
 /website/website/settings.py
+/website/settings.py
+/website/M_apikey.py
 /.vscode/
 /.idea/
 
