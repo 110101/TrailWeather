@@ -2,8 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from algo import run_algo
-from algo import dojo
+import run_algo
+import dojo
 
 # Create your views here.
 # index view
