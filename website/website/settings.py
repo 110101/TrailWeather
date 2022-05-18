@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['trailweather.azurewebsites.net', 'localhost']
 
-
+# 
 # Application definition
 
 INSTALLED_APPS = [
