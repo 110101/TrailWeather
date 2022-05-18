@@ -17,18 +17,15 @@ def run_algo_smplfd(dataset, lat, lon, stype):
     # -- AVERAGE Values for the past 5 days
     # average temp (last 5 days)
     temp_avrg_5days = dataset['temp'].mean()
-    print("Average Temp:")
-    print(temp_avrg_5days)
+    print("Average Temp: " + str(temp_avrg_5days))
 
     # average humidity (last 5 days)
     hum_avrg_5days = dataset['humidity'].mean()
-    print("Average Hum:")
-    print(hum_avrg_5days)
+    print("Average Hum: " + str(hum_avrg_5days))
 
     # average wind
     wind_avrg_5days = dataset['wind'].mean()
-    print("Average Wind:")
-    print(wind_avrg_5days)
+    print("Average Wind: " + str(wind_avrg_5days))
 
     # -- RAIN INFO
     # find all time stamps with rain
@@ -418,39 +415,3 @@ def hoursindays(duration):
     hours = duration - (24*days)
 
     return days, hours
-
-
-# remove after testing
-def test():
-    # isar trails
-    lat = str(48.07)
-    lng = str(11.54)
-    stype = "gravel"
-
-
-    # get current timestamp in UNIX
-    timestamp = owm_api.time_now_UNIX()
-
-    # load owm test data
-    # django localhost test:
-    # filepath = "../website/algo/ref_data/synth_test_one_rain.csv"
-    # weather_data_owm = pandas.read_csv(filepath, usecols=['dt', 'temp', 'humidity', 'dew_point', 'wind', 'weather_id',
-    #                                                       'rain_mm'])
-    # local:
-    script_dir = os.getcwd()
-    filepath = "ref_data/synth_test_one_rain.csv"
-    weather_data_owm = pandas.read_csv(os.path.normcase(os.path.join(script_dir, filepath)),
-                                       usecols=['dt', 'temp', 'humidity', 'dew_point', 'wind', 'weather_id',
-                                                'rain_mm'])
-
-    # run the algo
-    surface_condition = run_algo_smplfd(weather_data_owm, lat, lng, stype)
-
-    return surface_condition
-
-# res = test()
-# print("res:")
-# print(res)
-
-# abbriviations
-# ts - timestamp
