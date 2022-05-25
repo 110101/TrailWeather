@@ -1,4 +1,13 @@
 # Project exclude paths
+<<<<<<< Updated upstream
+=======
+/website/settings.py
+/website/algo/M_apikey.py
+/website/website/settings.py
+/website/M_apikey.py
+settings.py
+M_apikey.py
+>>>>>>> Stashed changes
 /.vscode/
 /.idea/
 
