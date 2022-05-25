@@ -26,6 +26,9 @@ jobs:
           python-version: '3.9'
 
       - name: Create and start virtual environment
+        env:
+          DJANGOKEY: ${{ secrets.DJANGO_SECRETKEY }}
+          OWMKEY: ${{ secrets.OWM_APIKEY }} 
         run: |
           python -m venv venv
           source venv/bin/activate
@@ -33,10 +36,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
         
-      - name:
-        env:
-          DJANGOKEY: ${{ secrets.DJANGO_SECRETKEY }}
-          OWMKEY: ${{ secrets.OWM_APIKEY }} 
       #Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
       - name: Upload artifact for deployment jobs
@@ -53,6 +52,8 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      DJANGOKEY: ${{ secrets.DJANGO_SECRETKEY }}
+      OWMKEY: ${{ secrets.OWM_APIKEY }} 
 
     steps:
       - name: Download artifact from build job
