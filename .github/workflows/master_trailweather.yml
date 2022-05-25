@@ -49,8 +49,6 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      DJANGOKEY: ${{ secrets.DJANGO_SECRETKEY }}
-      OWMKEY: ${{ secrets.OWM_APIKEY }} 
 
     steps:
       - name: Download artifact from build job
@@ -66,3 +64,6 @@ jobs:
           app-name: 'trailweather'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_271EF42FADAA4D5AA6A2FC5325586CB0 }}
+          DJANGOKEY: ${{ secrets.DJANGO_SECRETKEY }}
+          OWMKEY: ${{ secrets.OWM_APIKEY }} 
+
