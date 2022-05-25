@@ -23,10 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY =  os.environ['DJANGO_SECRETKEY']
 
 # SECURITY WARNING: don't run_base_algo_detailed with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['trailweather.azurewebsites.net', 'localhost']
-
+autohost = os.environ['WEBSITE_HOSTNAME']
+ALLOWED_HOSTS = [autohost, 'trailweather.azurewebsites.net', 'localhost']
+ 
 # 
 # Application definition
 
